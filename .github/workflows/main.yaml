@@ -32,3 +32,5 @@ jobs:
       # deploy
       - run: |
           mkdocs gh-deploy --force
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
