@@ -10,29 +10,29 @@ theme:
     # primary: grey
     # Light mode
     - scheme: default
-      primary: grey
+      primary: pink
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
 
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
-      primary: grey
+      primary: pink
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
 
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
-      scheme: default 
-      primary: grey
+      scheme: default
+      primary: pink
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
 
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
-      primary: grey
+      primary: pink
       scheme: slate
       toggle:
         icon: material/toggle-switch
@@ -69,6 +69,9 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - markdown_grid_tables
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.highlight
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.details

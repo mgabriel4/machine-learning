@@ -13,5 +13,6 @@ termynal
 matplotlib
 numpy
 pandas
+regex
 yfinance
-
+scikit-learn
