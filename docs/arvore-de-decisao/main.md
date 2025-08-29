@@ -9,6 +9,16 @@
 * [x] Avaliação do Modelo
 * [x] Relatório Final
 
+## Diagrama do Projeto
+
+```mermaid
+flowchart TD
+    A[Exploração dos Dados] --> B[Pré-processamento]
+    B --> C[Modelagem]
+    C --> D[Resultados]
+    D --> E[Conclusão]
+```
+
 ---
 
 ## 1. Exploração dos Dados (EDA)
