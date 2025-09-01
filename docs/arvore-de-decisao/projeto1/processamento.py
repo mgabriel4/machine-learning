@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier, plot_tree 
 
-data = pd.read_csv("docs/arvore-de-decisao/data/BMW_Car.csv")
+data = pd.read_csv("docs/data/BMW_Car.csv")
 
 data['Model_Num'] = LabelEncoder().fit_transform(data['Model']) #transforma a variável Model em numérica
 data['Region_Num'] = LabelEncoder().fit_transform(data['Region']) #transforma a variável Region em numérica
@@ -54,5 +54,5 @@ print("Relatório de classificação:\n", classification_report(y_test, y_pred))
 #visualização da árvore de decisão
 plt.figure(figsize=(10,5))
 tree = plot_tree(clf, feature_names=features, class_names=['Not Low','Low'], filled=True, rounded=True)
-plt.savefig('./docs/arvore-de-decisao/img/arvore.png')
+plt.savefig('./docs/arvore-de-decisao/img/arvorecars.png')
 plt.show()

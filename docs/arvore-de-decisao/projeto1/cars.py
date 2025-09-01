@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 #carregar o dataset
-data = pd.read_csv('docs/arvore-de-decisao/data/BMW_Car.csv')
+data = pd.read_csv('docs/data/BMW_Car.csv')
 
 # Análise exploratória inicial
 print("Primeiras 5 linhas do dataset:")
