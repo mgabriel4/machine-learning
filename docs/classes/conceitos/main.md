@@ -10,7 +10,9 @@ A Inteligência Artificial serve para automatizar a mão de obra humana. Ela pod
 
 2. **Connectionist AI**: é a IA baseada em redes neurais e se concentra em cálculos e inferências matemáticas.
 
-3. **Neuro-Symbolic AI**: é a intersecção entre a IA simbólica e a IA Conexionista. Isso faz com
+3. **Neuro-Symbolic AI**: é a intersecção entre o raciocínio simbólico com as redes neurais, o que potencializa os pontos fortes das outras IA's para que a Neuro-Symbolic AI consiga resolver problemas complexos e ao mesmo tempo aprender com os dados.
+
+![Hierarquia da IA](../../assets/images/IA.png)
 
 ## Árvore de decisão
 

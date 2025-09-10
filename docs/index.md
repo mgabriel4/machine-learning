@@ -12,10 +12,6 @@ Aqui está todos os datasets que utilizei nessa documentação:
 
 - [Ames Housing Dataset - Kaggle](https://www.kaggle.com/code/ammar111/house-price-prediction-an-end-to-end-ml-project)
 
-## Como navegar
-
-Utilize o menu lateral para acessar cada etapa do projeto e visualizar os códigos, gráficos e explicações detalhadas.
-
 ---
 
 ## Referências

@@ -1,8 +1,8 @@
 site_name: Machine Learning
-site_author: Maria Gabriela
-site_url: https://hsandmann.github.io/documentation.template
-repo_url: https://github.com/hsandmann/documentation.template
-repo_name: github/documentation.template
+site_author: Maria Gabriela Santos
+site_url: https://mgabriel4.github.io/machine-learning/
+repo_url: https://github.com/mgabriel4/machine-learning
+repo_name: github/machine-learning
 
 theme:
   name: material
@@ -10,14 +10,14 @@ theme:
     # primary: grey
     # Light mode
     - scheme: default
-      primary: pink
+      primary: deep_purple
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
 
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
-      primary: pink
+      primary: deep_purple
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
@@ -25,14 +25,14 @@ theme:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: pink
+      primary: deep_purple
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
 
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
-      primary: pink
+      primary: deep_purple
       scheme: slate
       toggle:
         icon: material/toggle-switch
@@ -136,15 +136,15 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Conceitos: ./conceitos/main.md
+  - Conceitos: ./classes/conceitos/main.md
   - Árvore de decisão: 
-    - Projeto 1: ./arvore-de-decisao/projeto1/main.md
-    - Projeto 2: ./arvore-de-decisao/projeto2/main.md
+    - Projeto 1: ./classes/arvore-de-decisao/projeto1/main.md
+    - Projeto 2: ./classes/arvore-de-decisao/projeto2/main.md
   - Roteiros:
-    - Roteiro 1: ./roteiro1/main.md
-    - Roteiro 2: ./roteiro2/main.md
-    - Roteiro 3: ./roteiro3/main.md
-    - Roteiro 4: ./roteiro4/main.md
-  - Projeto: ./projeto/main.md
+    - Roteiro 1: ./classes/roteiro1/main.md
+    - Roteiro 2: ./classes/roteiro2/main.md
+    - Roteiro 3: ./classes/roteiro3/main.md
+    - Roteiro 4: ./classes/roteiro4/main.md
+  - Projeto: ./classes/projeto/main.md
   - Quiz:
-    - Conceitos: ./quiz/conceitos.md
+    - Conceitos: ./classes/quiz/conceitos.md

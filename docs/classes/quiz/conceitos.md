@@ -8,21 +8,14 @@
     
     d) <mark>O hiperplano que separa classes com máxima margem.<mark>
 
-*EXPLICAÇÃO:*
+>*EXPLICAÇÃO:*
+>A **fronteira de decisão** é o limite que separa regiões do espaço de atributos onde o modelo classifica exemplos como pertencentes a diferentes classes.
+>Em modelos lineares como SVM, essa fronteira é um hiperplano. Para SVMs, o hiperplano é posicionado de forma a maximizar a margem entre as classes.
 
-A **fronteira de decisão** é o limite que separa regiões do espaço de atributos onde o modelo classifica exemplos como pertencentes a diferentes classes. 
-
-Em modelos lineares como SVM, essa fronteira é um hiperplano. Para SVMs, o hiperplano é posicionado de forma a maximizar a margem entre as classes. 
-
-
-2. O que é bias em modelos de ML?
-    
+2. O que é bias em modelos de ML?    
     a) Aumento de dimensionalidade.
-    
     b) Técnica de ensemble learning.
-    
     c) Variação aleatória nos dados de teste.
-    
     d) <mark>Erro devido a suposições simplificadas no modelo.<mark>
 
 > Bias é o erro ocasionado por simplificações no modelo. 

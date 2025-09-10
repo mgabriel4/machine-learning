@@ -1,23 +1,25 @@
 # Projeto: Classificação de Vendas de Carros BMW com Árvore de Decisão
 
-## Etapas
+## Objetivo
 
-* [x] Exploração dos Dados (EDA)
-* [x] Pré-processamento
-* [x] Divisão dos Dados
-* [x] Treinamento do Modelo
-* [x] Avaliação do Modelo
-* [x] Relatório Final
+O objetivo deste projeto é investigar e comprovar, por meio de Machine Learning (usando uma árvore de decisão), quais fatores influenciam a classificação de vendas de carros BMW.
 
----
+**Hipótese:** A minha hipótese consiste que fatores técnicos como o ano do veículo, tipo de combustível, câmbio e fatores regionais são determinantes para prever se um carro terá uma baixa classificação de vendas.
 
 ## 1. Exploração dos Dados (EDA)
 
 Nesta etapa, foi realizada a análise exploratória do dataset [BMW_Car.csv](https://www.kaggle.com/dataset/hsumedh1507/bmw-car-sales-dataset), verificando as primeiras linhas, informações gerais, estatísticas descritivas, valores ausentes e visualização das variáveis categóricas.
 
+* O dataset contém informações sobre vendas de carros BMW, incluindo variáveis categóricas como região, tipo de combustível e transmissão.
+
+* Foram analisadas as primeiras linhas, estatísticas e valores ausentes.
+
+* Gráficos de barra e pizza foram utilizados para visualizar as principais categorias.
+
 === "Output"
+
     ```
-    **Primeiras 5 linhas do dataset:**
+    Primeiras 5 linhas do dataset:
 
       Model  Year         Region  Color Fuel_Type Transmission  Engine_Size_L  \
     0  5 Series  2016           Asia    Red    Petrol       Manual            3.5   
@@ -90,14 +92,13 @@ Nesta etapa, foi realizada a análise exploratória do dataset [BMW_Car.csv](htt
     ```
 
 === "Code"
+
     ```python
     import pandas as pd
-    import numpy as np
     import matplotlib.pyplot as plt
-    import seaborn as sns
 
-    # Carregar o dataset
-    data = pd.read_csv('docs/arvore-de-decisao/data/BMW_Car.csv')
+    #carregar o dataset
+    data = pd.read_csv('data/BMW_Car.csv')
 
     # Análise exploratória inicial
     print("Primeiras 5 linhas do dataset:")
@@ -112,50 +113,88 @@ Nesta etapa, foi realizada a análise exploratória do dataset [BMW_Car.csv](htt
     print("\nValores ausentes por coluna:")
     print(data.isnull().sum())
 
-    # Visualização das variáveis categóricas
+    #visualização das variáveis categóricas
+    plt.style.use('ggplot')
     plt.figure(figsize=(15, 10))
 
     plt.subplot(2, 2, 1)
+    data['Transmission'].value_counts().plot.pie(autopct='%1.1f%%', figsize=(6,6))
+    plt.title('Tipo de carro')
+    plt.ylabel('')  #remove o label do eixo Y
+
+    plt.subplot(2, 2, 2)
+    data['Fuel_Type'].value_counts().plot.pie(autopct='%1.1f%%', figsize=(6,6))
+    plt.title('Tipo de Combustível')
+    plt.ylabel('')  #remove o label do eixo Y
+
+    plt.subplot(2, 1, 2)
     data['Region'].value_counts().head(5).plot(kind='bar')
     plt.title('Top 5 Regiões')
     plt.xticks(rotation=45)
 
-    plt.subplot(2, 2, 2)
-    data['Fuel_Type'].value_counts().head(5).plot(kind='bar')
-    plt.title('Top 5 tipos de Combustível')
-    plt.xticks(rotation=45)
-
-    plt.subplot(2, 2, 3)
-    data['Transmission'].value_counts().plot.pie(autopct='%1.1f%%', figsize=(6,6))
-    plt.ylabel('')  # Remove o label do eixo Y
-
-    plt.tight_layout()
-    plt.savefig('./docs/arvore-de-decisao/categorical_distribution.png')
+    plt.savefig('./docs/classes/arvore-de-decisao/img/distribuicao.png')
     plt.show()
 
-    print(data.columns.tolist())
     ```
-
-=== "Gráfico"
-    ![Distribuição de variáveis categóricas](img/distribuicao.png)
 
 === "Explicação"
 
-    * O dataset contém informações sobre vendas de carros BMW, incluindo variáveis categóricas como região, tipo de combustível e transmissão.
+    Utilizamos a biblioteca Pandas para a análise de dados e a biblioteca Matplotlib.pyplot para fazer os gráficos para uma melhor visualização dos dados.
 
-    * Foram analisadas as primeiras linhas, estatísticas e valores ausentes.
+    Logo após carregarmos a base de dados:
+    
+    * base = pd.read_csv('caminho/para/a/base')
 
-    * Gráficos de barra e pizza foram utilizados para visualizar as principais categorias.
+    Utilizamos comandos para a análise exploratória da base:
+
+    * base.head() -> sem a especificação de quantas linhas puxar, o head imprime as primeiras 5 linhas da sua base de dados.
+
+    * base.info() -> mostra as colunas da base de dados e seus respectivos tipos.
+
+    * base.describe(include='all') -> imprime as estatísticas descritivas das colunas da base de dados, como a frequência, a média, o desvio padrão e etc.
+
+    * base.isnull().sum() -> soma todos os valores nulos por coluna.
+
+    Após finalizar esse processo com a análise exploratória, precisamos fazer a visualização da análise realizada. Por isso, utilizamos os seguintes comandos:
+    
+    * plt.style.use('ggplot') -> sendo plt a biblioteca do matplotlib, esse comando serve para escolhermos o estilo que 
+    
+    * plt.figure(figsize=(15, 10)) -> cria uma nova figura para colocar os gráficos.
+
+    * plt.subplot(2, 2, 1) -> este comando divide a figura em uma grade de 2 linhas por 2 colunas. O último parâmetro é a posição do gráfico.
+    
+    * base['nome_coluna'].value_counts().plot.pie(autopct='%1.1f%%', figsize=(6,6)) -> constrói um gráfico de pizza com a coluna escolhida da base. O comando autopct exibe as porcentagens em cada fatia.
+    
+    * plt.title('Tipo de carro') -> intitula o gráfico.
+    
+    * plt.ylabel('') -> remove o label do eixo Y, comando utilizado apenas em gráficos de pizza
+
+    * base['nome_coluna'].value_counts().head(5).plot(kind='bar') -> constrói um gráfico de barra, e com o comando head(5) irá aparecer apenas os 5 mais frequentes daquela coluna.
+  
+    * plt.xticks(rotation=45) -> rotaciona o gráfico de barra a 45° para uma melhor visualização.
+
+    * plt.savefig('caminho/que/deseja/salvar') -> salva a figura completa que foi iniciada lá no início do código no caminho que foi apontado.
+
+    * plt.show() -> exibe a figura na tela.
+
+=== "Gráfico"
+    ![Distribuição de variáveis categóricas](../../arvore-de-decisao/img/distribuicao.png)
 
 ---
 
 ## 2. Pré-processamento
 
-Como visto anteriormente, na etapa de exploração do dataset, não temos variáveis com valores ausentes. Logo, não se torna necessário fazer a substituição destes valores. No entanto, temos algumas variáveis categóricas que precisam ser transformadas em numéricas usando o Label Encoding e o One-Hot Encoding.
+Como visto anteriormente, na etapa de exploração do dataset, não temos variáveis com valores ausentes. Logo, não se torna necessário fazer a substituição destes valores. No entanto, temos algumas variáveis categóricas que precisam ser transformadas em numéricas usando as técnicas do Label Encoding e o One-Hot Encoding.
 
 **Label Encoding** -> serve para variáveis categóricas que não são binárias.
 
 **One-Hot Encoding** -> serve para variáveis binárias. 0-sim/true e 1-não/false.
+
+* Variáveis categóricas foram transformadas em numéricas para uso no modelo.
+
+* Se tivesse valores nulos, em variáveis numéricas seriam preenchidos com a mediana; em categóricas, com a moda.
+
+* O dataset ficou pronto para o treinamento do modelo.
 
 === "Output"
     ```
@@ -206,7 +245,7 @@ Como visto anteriormente, na etapa de exploração do dataset, não temos variá
     from sklearn.model_selection import train_test_split
     from sklearn.tree import DecisionTreeClassifier, plot_tree
 
-    data = pd.read_csv("docs/arvore-de-decisao/data/BMW_Car.csv")
+    data = pd.read_csv("data/BMW_Car.csv")
 
     # Label Encoding
     data['Model_Num'] = LabelEncoder().fit_transform(data['Model'])
@@ -221,20 +260,17 @@ Como visto anteriormente, na etapa de exploração do dataset, não temos variá
     ```
 
 === "Explicação"
+    Nesta parte do código utilizamos a biblioteca sklearn que é famosa pelo seu utilizamento em machine learning, sendo possível 
 
-    * Variáveis categóricas foram transformadas em numéricas para uso no modelo.
+    As técnicas são feitas no código através dos comandos:
 
-    * Se tivesse valores nulos, em variáveis numéricas seriam preenchidos com a mediana; em categóricas, com a moda.
+    * base['nome_coluna'] = LabelEncoder().fit_transform(base['nome_musica']) -> LabelEnconder é um comando que 
 
-    * O dataset ficou pronto para o treinamento do modelo.
+    * 
 
 ---
 
 ## 3. Divisão dos Dados
-
-Mas afinal, que hipótese eu quero comprovar??
-
-A minha hipótese consiste que fatores técnicos como o ano do veículo, tipo de combustível, câmbio e fatores regionais são determinantes para prever se um carro terá baixa classificação de vendas.
 
 Com o intuito de ver se minha hipótese é verdadeira ou não, eu treinei o meu modelo dividindo os dados em conjuntos de treino e teste (70% por 30%).
 
@@ -310,7 +346,7 @@ O desempenho do modelo foi avaliado com métricas de classificação e visualiza
     ```
 
 === "Gráfico"
-    ![Árvore de Decisão](img/arvore.png)
+    ![Árvore de Decisão](../../arvore-de-decisao/img/distribuicao.png)
 
 === "Explicação"
 
@@ -320,6 +356,14 @@ O desempenho do modelo foi avaliado com métricas de classificação e visualiza
 
 ---
 
+Ao avaliar o desempenho do meu modelo de árvore de decisão, vemos que a acurácia ficou em torno de 70%. Isso significa que, de todos os exemplos do conjunto de teste, o modelo acertou 70% das classificações entre “baixa venda” e “não baixa venda”.
+
+No entanto, ao analisar o relatório de classificação, percebemos que o modelo tem um recall de 1.00 para a classe “baixa venda”, ou seja, ele identifica todos os casos de baixa venda corretamente. Por outro lado, para a classe “não baixa venda”, o modelo praticamente não acerta (precision, recall e f1-score são 0). Isso indica que o modelo está priorizando a classe majoritária, provavelmente porque *o dataset está desbalanceado, com muito mais exemplos de baixa venda do que de não baixa venda*.
+
 ## 6. Relatório Final
 
-Concluo que, a análise realizada por meio da árvore de decisão mostrou que fatores técnicos, como o ano de fabricação e o tipo de combustível, além de fatores regionais, influenciam diretamente na classificação de vendas dos veículos, confirmando em grande parte a hipótese inicial. O modelo evidenciou que carros mais antigos apresentam maior propensão a serem classificados como de baixa venda, enquanto em veículos mais recentes o tipo de combustível e a região se tornam mais determinantes. Apesar disso, o relatório de classificação revelou que o modelo possui limitações, uma vez que ele prioriza prever corretamente os casos de baixa venda (Recall = 1,00), mas não consegue identificar com precisão os casos de não baixa venda, refletindo o desbalanceamento presente no conjunto de dados. Dessa forma, conclui-se que a árvore de decisão se mostrou útil para confirmar as hipóteses propostas e identificar padrões relevantes, mas ainda há espaço para aprimoramentos, como o balanceamento das classes ou ajustes nos parâmetros do modelo, para garantir previsões mais equilibradas e robustas.
+Concluo que, a análise realizada por meio da árvore de decisão mostrou que fatores técnicos, como o ano de fabricação e o tipo de combustível, além de fatores regionais, influenciam diretamente na classificação de vendas dos veículos, confirmando em grande parte a hipótese inicial. O modelo evidenciou que carros mais antigos apresentam maior propensão a serem classificados como de baixa venda, enquanto em veículos mais recentes o tipo de combustível e a região se tornam mais determinantes.
+
+Apesar disso, o relatório de classificação revelou que o modelo possui limitações, uma vez que ele prioriza prever corretamente os casos de baixa venda (Recall = 1,00), mas não consegue identificar com precisão os casos de não baixa venda, refletindo o desbalanceamento presente no conjunto de dados.
+
+Dessa forma, conclui-se que a árvore de decisão se mostrou útil para confirmar as hipóteses propostas e identificar padrões relevantes, mas ainda há espaço para aprimoramentos, como o balanceamento das classes ou ajustes nos parâmetros do modelo, para garantir previsões mais equilibradas e robustas.

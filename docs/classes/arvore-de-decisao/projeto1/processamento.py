@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier, plot_tree 
 
-data = pd.read_csv("docs/data/BMW_Car.csv")
+data = pd.read_csv("data/BMW_Car.csv")
 
 data['Model_Num'] = LabelEncoder().fit_transform(data['Model']) #transforma a variável Model em numérica
 data['Region_Num'] = LabelEncoder().fit_transform(data['Region']) #transforma a variável Region em numérica

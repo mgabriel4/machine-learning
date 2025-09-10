@@ -1,10 +1,8 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 #carregar o dataset
-data = pd.read_csv('docs/data/BMW_Car.csv')
+data = pd.read_csv('data/BMW_Car.csv')
 
 # Análise exploratória inicial
 print("Primeiras 5 linhas do dataset:")
@@ -38,7 +36,5 @@ data['Region'].value_counts().head(5).plot(kind='bar')
 plt.title('Top 5 Regiões')
 plt.xticks(rotation=45)
 
-plt.savefig('./docs/arvore-de-decisao/img/distribuicao.png')
+plt.savefig('./docs/classes/arvore-de-decisao/img/distribuicao.png')
 plt.show()
-
-print(data.columns.tolist())
