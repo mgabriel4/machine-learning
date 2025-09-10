@@ -260,7 +260,7 @@ Como visto anteriormente, na etapa de exploração do dataset, não temos variá
     ```
 
 === "Explicação"
-    Nesta parte do código utilizamos a biblioteca sklearn que é famosa pelo seu utilizamento em machine learning, sendo possível 
+    Nesta parte do código utilizamos a biblioteca sklearn que é famosa pelo seu utilizamento em machine learning, sendo possível
 
     As técnicas são feitas no código através dos comandos:
 
@@ -346,7 +346,7 @@ O desempenho do modelo foi avaliado com métricas de classificação e visualiza
     ```
 
 === "Gráfico"
-    ![Árvore de Decisão](../../arvore-de-decisao/img/distribuicao.png)
+    ![Árvore de Decisão](../../arvore-de-decisao/img/arvorecars.png)
 
 === "Explicação"
 
