@@ -9,6 +9,8 @@ mkdocs-git-authors-plugin
 mkdocs-git-committers-plugin-2
 mkdocs-git-revision-date-localized-plugin
 mkdocs-render-swagger-plugin
+pymdown-extensions
+pymdown-extensions[mermaid]
 termynal
 matplotlib
 numpy

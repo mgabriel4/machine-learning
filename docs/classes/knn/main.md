@@ -1,193 +1,164 @@
-# Projeto: Classificação de Vendas de Carros BMW com Árvore de Decisão
-
-## Objetivo
-
-O objetivo deste projeto é investigar e comprovar, por meio de Machine Learning (usando uma árvore de decisão), quais fatores influenciam a classificação de vendas de carros BMW.
-
-**Hipótese:** A minha hipótese consiste que fatores técnicos como o ano do veículo, tipo de combustível, câmbio e fatores regionais são determinantes para prever se um carro terá uma baixa classificação de vendas.
+# Projeto
 
 ## 1. Exploração dos Dados (EDA)
 
-Nesta etapa, foi realizada a análise exploratória do dataset [BMW_Car.csv](https://www.kaggle.com/dataset/hsumedh1507/bmw-car-sales-dataset), verificando as primeiras linhas, informações gerais, estatísticas descritivas, valores ausentes e visualização das variáveis categóricas.
+Nesta etapa, foi realizada a análise exploratória do dataset [heart.csv](https://www.kaggle.com/datasets/ritwikb3/heart-disease-cleveland?resource=download), que contém informações clínicas de pacientes para detecção de doenças cardíacas.
 
-* O dataset contém informações sobre vendas de carros BMW, incluindo variáveis categóricas como região, tipo de combustível e transmissão.
+* O dataset possui 303 registros e 14 variáveis, incluindo idade, sexo, tipo de dor no peito, pressão arterial, colesterol, frequência cardíaca máxima, entre outras.
 
-* Foram analisadas as primeiras linhas, estatísticas e valores ausentes.
+* Foram analisadas as primeiras linhas, estatísticas descritivas e valores ausentes (não há valores ausentes neste conjunto).
 
-* Gráficos de barra e pizza foram utilizados para visualizar as principais categorias.
+* Gráficos de barras foram utilizados para visualizar a distribuição das variáveis categóricas e numéricas, além de uma matriz de correlação para identificar relações entre as variáveis.
 
 === "Output"
 
     ```
     Primeiras 5 linhas do dataset:
 
-      Model  Year         Region  Color Fuel_Type Transmission  Engine_Size_L  \
-    0  5 Series  2016           Asia    Red    Petrol       Manual            3.5   
-    1        i8  2013  North America    Red    Hybrid    Automatic            1.6   
-    2  5 Series  2022  North America   Blue    Petrol    Automatic            4.5   
-    3        X3  2024    Middle East   Blue    Petrol    Automatic            1.7   
-    4  7 Series  2020  South America  Black    Diesel       Manual            2.1   
+    age  sex  cp  trestbps  chol  fbs  restecg  thalach  exang  oldpeak  slope  ca  thal  target
+    0   63    1   0       145   233    1        2      150      0      2.3      2   0     2       0
+    1   67    1   3       160   286    0        2      108      1      1.5      1   3     1       1
+    2   67    1   3       120   229    0        2      129      1      2.6      1   2     3       1
+    3   37    1   2       130   250    0        0      187      0      3.5      2   0     1       0
+    4   41    0   1       130   204    0        2      172      0      1.4      0   0     1       0
 
-    Mileage_KM  Price_USD  Sales_Volume Sales_Classification  
-    0      151748      98740          8300                 High  
-    1      121671      79219          3428                  Low  
-    2       10991     113265          6994                  Low  
-    3       27255      60971          4047                  Low  
-    4      122131      49898          3080                  Low 
-
-    **Estatísticas descritivas:**
-
-           Model          Year Region  Color Fuel_Type Transmission  \
-    count      50000  50000.000000  50000  50000     50000        50000   
-    unique        11           NaN      6      6         4            2   
-    top     7 Series           NaN   Asia    Red    Hybrid       Manual   
-    freq        4666           NaN   8454   8463     12716        25154   
-    mean         NaN   2017.015700    NaN    NaN       NaN          NaN   
-    std          NaN      4.324459    NaN    NaN       NaN          NaN   
-    min          NaN   2010.000000    NaN    NaN       NaN          NaN   
-    25%          NaN   2013.000000    NaN    NaN       NaN          NaN   
-    50%          NaN   2017.000000    NaN    NaN       NaN          NaN   
-    75%          NaN   2021.000000    NaN    NaN       NaN          NaN   
-    max          NaN   2024.000000    NaN    NaN       NaN          NaN   
-
-            Engine_Size_L     Mileage_KM      Price_USD  Sales_Volume  \
-    count    50000.000000   50000.000000   50000.000000  50000.000000   
-    unique            NaN            NaN            NaN           NaN   
-    top               NaN            NaN            NaN           NaN   
-    freq              NaN            NaN            NaN           NaN   
-    mean         3.247180  100307.203140   75034.600900   5067.514680   
-    std          1.009078   57941.509344   25998.248882   2856.767125   
-    min          1.500000       3.000000   30000.000000    100.000000   
-    25%          2.400000   50178.000000   52434.750000   2588.000000   
-    50%          3.200000  100388.500000   75011.500000   5087.000000   
-    75%          4.100000  150630.250000   97628.250000   7537.250000   
-    max          5.000000  199996.000000  119998.000000   9999.000000   
-
-        Sales_Classification  
-    count                 50000  
-    unique                    2  
-    top                     Low  
-    freq                  34754  
-    mean                    NaN  
-    std                     NaN  
-    min                     NaN  
-    25%                     NaN  
-    50%                     NaN  
-    75%                     NaN  
-    max                     NaN  
-
-    **Valores ausentes por coluna:**
+    Informações do dataset:
     
-    Model                   0
-    Year                    0
-    Region                  0
-    Color                   0
-    Fuel_Type               0
-    Transmission            0
-    Engine_Size_L           0
-    Mileage_KM              0
-    Price_USD               0
-    Sales_Volume            0
-    Sales_Classification    0
+    <class 'pandas.core.frame.DataFrame'>
+    RangeIndex: 303 entries, 0 to 302
+    Data columns (total 14 columns):
+    #   Column    Non-Null Count  Dtype
+    ---  ------    --------------  -----
+    0   age       303 non-null    int64
+    1   sex       303 non-null    int64
+    2   cp        303 non-null    int64
+    3   trestbps  303 non-null    int64
+    4   chol      303 non-null    int64
+    5   fbs       303 non-null    int64
+    6   restecg   303 non-null    int64
+    7   thalach   303 non-null    int64
+    8   exang     303 non-null    int64
+    9   oldpeak   303 non-null    float64
+    10  slope     303 non-null    int64
+    11  ca        303 non-null    int64
+    12  thal      303 non-null    int64
+    13  target    303 non-null    int64
+    dtypes: float64(1), int64(13)
+    memory usage: 33.3 KB
+    None
+
+    Estatísticas descritivas:
+    
+    age         sex          cp    trestbps  ...       slope          ca        thal      targetcount  303.000000  303.000000  303.000000  303.000000  ...  303.000000  303.000000  303.000000  303.000000mean    54.438944    0.679868    2.158416  131.689769  ...    0.600660    0.663366    1.831683    0.458746std      9.038662    0.467299    0.960126   17.599748  ...    0.616226    0.934375    0.956705    0.499120min     29.000000    0.000000    0.000000   94.000000  ...    0.000000    0.000000    1.000000    0.00000025%     48.000000    0.000000    2.000000  120.000000  ...    0.000000    0.000000    1.000000    0.00000050%     56.000000    1.000000    2.000000  130.000000  ...    1.000000    0.000000    1.000000    0.00000075%     61.000000    1.000000    3.000000  140.000000  ...    1.000000    1.000000    3.000000    1.000000max     77.000000    1.000000    3.000000  200.000000  ...    2.000000    3.000000    3.000000    1.000000
+    [8 rows x 14 columns]
+
+    Valores ausentes por coluna:
+    
+    age         0
+    sex         0
+    cp          0
+    trestbps    0
+    chol        0
+    fbs         0
+    restecg     0
+    thalach     0
+    exang       0
+    oldpeak     0
+    slope       0
+    ca          0
+    thal        0
+    target      0
+    dtype: int64
     ```
 
 === "Code"
 
     ```python
     import pandas as pd
+    import numpy as np
     import seaborn as sns
     import matplotlib.pyplot as plt
 
-    #carregar o dataset
-    data = pd.read_csv('data/BMW_Car.csv')
+    dados = pd.read_csv('data/heart.csv')
 
-    # Análise exploratória inicial
     print("Primeiras 5 linhas do dataset:")
-    print(data.head())
-
+    print(dados.head())
     print("\nInformações do dataset:")
-    print(data.info())
-
+    print(dados.info())
     print("\nEstatísticas descritivas:")
-    print(data.describe(include='all'))
-
+    print(dados.describe(include='all'))
     print("\nValores ausentes por coluna:")
-    print(data.isnull().sum())
+    print(dados.isnull().sum())
 
-    #visualização das variáveis categóricas
+    # Visualização das variáveis categóricas
     plt.style.use('ggplot')
     plt.figure(figsize=(15, 10))
 
     plt.subplot(2, 2, 1)
-    data['Transmission'].value_counts().plot.pie(autopct='%1.1f%%', figsize=(6,6))
-    plt.title('Tipo de carro')
-    plt.ylabel('')  #remove o label do eixo Y
+    sns.countplot(x='target', data=dados)
+    plt.title('Distribuição da variável alvo')
+    plt.ylabel('Contagem')
 
     plt.subplot(2, 2, 2)
-    data['Fuel_Type'].value_counts().plot.pie(autopct='%1.1f%%', figsize=(6,6))
-    plt.title('Tipo de Combustível')
-    plt.ylabel('')  #remove o label do eixo Y
+    sns.countplot(x='sex', data=dados)
+    plt.title('Distribuição por Sexo')
+    plt.ylabel('Contagem')
 
     plt.subplot(2, 1, 2)
-    data['Region'].value_counts().head(5).plot(kind='bar')
-    plt.title('Top 5 Regiões')
+    sns.countplot(x='cp', data=dados)
+    plt.title('Distribuição por Tipo de Dor no Peito')
+    plt.ylabel('Contagem')
     plt.xticks(rotation=45)
-
-    plt.savefig('./docs/classes/arvore-de-decisao/img/distribuicao.png')
+    plt.tight_layout()
+    plt.savefig('./docs/classes/knn/img/distribuicao.png')
     plt.show()
 
+    # Visualização das variáveis numéricas
+    plt.figure(figsize=(15, 10))
+    plt.subplot(2, 2, 1)
+    sns.histplot(dados['age'], bins=20, kde=True)
+    plt.title('Distribuição da Idade')
+    plt.xlabel('Idade')
+    plt.ylabel('Frequência')
+    plt.subplot(2, 2, 2)
+    sns.histplot(dados['trestbps'], bins=20, kde=True)
+    plt.title('Distribuição da Pressão Arterial em Repouso')
+    plt.xlabel('Pressão Arterial (mm Hg)')
+    plt.ylabel('Frequência')
+    plt.subplot(2, 1, 2)
+    sns.histplot(dados['chol'], bins=20, kde=True)
+    plt.title('Distribuição do Colesterol')
+    plt.xlabel('Colesterol (mg/dl)')
+    plt.ylabel('Frequência')
+    plt.tight_layout()
+    plt.savefig('./docs/classes/knn/img/distribuicao_numerica.png')
+    plt.show()
+
+    # Matriz de correlação
     plt.figure(figsize=(10, 8))
-    correlation_matrix = data.corr(numeric_only=True)
+    correlation_matrix = dados.corr()
     sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap='coolwarm')
     plt.title('Matriz de Correlação')
-    plt.savefig('./docs/classes/arvore-de-decisao/img/matriz_correlacao.png')
+    plt.savefig('./docs/classes/knn/img/matriz_correlacao.png')
     plt.show()
     ```
 
-=== "Explicação"
+=== "Gráficos"
+    ![Distribuição de variáveis categóricas](../../knn/img/distribuicao.png)
+    ![Distribuição de variáveis numéricas](../../knn/img/distribuicao_numerica.png)
+    ![Matriz de correlação](../../knn/img/matriz_correlacao.png)
 
-    Utilizamos a biblioteca Pandas para a análise de dados e a biblioteca Matplotlib.pyplot para fazer os gráficos para uma melhor visualização dos dados.
+### Explicação da Matriz de Correlação
 
-    Logo após carregarmos a base de dados:
-    
-    * base = pd.read_csv('caminho/para/a/base')
+A matriz de correlação mostra o grau de relação linear entre as variáveis do dataset. Os valores variam de -1 a 1:
 
-    Utilizamos comandos para a análise exploratória da base:
+- **Correlação próxima de 1**: relação positiva forte (quando uma variável aumenta, a outra tende a aumentar).
+- **Correlação próxima de -1**: relação negativa forte (quando uma variável aumenta, a outra tende a diminuir).
+- **Correlação próxima de 0**: pouca ou nenhuma relação linear entre as variáveis.
 
-    * base.head() -> sem a especificação de quantas linhas puxar, o head imprime as primeiras 5 linhas da sua base de dados.
+No contexto do dataset de doenças cardíacas, a matriz de correlação permite identificar quais variáveis estão mais associadas ao risco de doença (variável `target`). Por exemplo, se `cp` (tipo de dor no peito) ou `thalach` (frequência cardíaca máxima) apresentarem alta correlação com `target`, podem ser importantes para o modelo preditivo. Relações negativas, como entre `exang` (angina induzida por exercício) e `target`, indicam que a presença de angina pode estar associada à ausência de doença.
 
-    * base.info() -> mostra as colunas da base de dados e seus respectivos tipos.
-
-    * base.describe(include='all') -> imprime as estatísticas descritivas das colunas da base de dados, como a frequência, a média, o desvio padrão e etc.
-
-    * base.isnull().sum() -> soma todos os valores nulos por coluna.
-
-    Após finalizar esse processo com a análise exploratória, precisamos fazer a visualização da análise realizada. Por isso, utilizamos os seguintes comandos:
-    
-    * plt.style.use('ggplot') -> sendo plt a biblioteca do matplotlib, esse comando serve para escolhermos o estilo que 
-    
-    * plt.figure(figsize=(15, 10)) -> cria uma nova figura para colocar os gráficos.
-
-    * plt.subplot(2, 2, 1) -> este comando divide a figura em uma grade de 2 linhas por 2 colunas. O último parâmetro é a posição do gráfico.
-    
-    * base['nome_coluna'].value_counts().plot.pie(autopct='%1.1f%%', figsize=(6,6)) -> constrói um gráfico de pizza com a coluna escolhida da base. O comando autopct exibe as porcentagens em cada fatia.
-    
-    * plt.title('Tipo de carro') -> intitula o gráfico.
-    
-    * plt.ylabel('') -> remove o label do eixo Y, comando utilizado apenas em gráficos de pizza
-
-    * base['nome_coluna'].value_counts().head(5).plot(kind='bar') -> constrói um gráfico de barra, e com o comando head(5) irá aparecer apenas os 5 mais frequentes daquela coluna.
-  
-    * plt.xticks(rotation=45) -> rotaciona o gráfico de barra a 45° para uma melhor visualização.
-
-    * plt.savefig('caminho/que/deseja/salvar') -> salva a figura completa que foi iniciada lá no início do código no caminho que foi apontado.
-
-    * plt.show() -> exibe a figura na tela.
-
-=== "Gráfico"
-    ![Distribuição de variáveis categóricas](../../arvore-de-decisao/img/distribuicao.png)
-
----
+Essa análise auxilia na seleção de variáveis relevantes e na compreensão dos fatores que influenciam o risco cardíaco.
 
 ## 2. Pré-processamento
 

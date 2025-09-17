@@ -1,4 +1,6 @@
 import pandas as pd
+import numpy as np
+import seaborn as sns
 import matplotlib.pyplot as plt
 
 #carregar o dataset
@@ -37,4 +39,11 @@ plt.title('Top 5 Regiões')
 plt.xticks(rotation=45)
 
 plt.savefig('./docs/classes/arvore-de-decisao/img/distribuicao.png')
+plt.show()
+
+plt.figure(figsize=(10, 8))
+correlation_matrix = data.corr(numeric_only=True)
+sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap='coolwarm')
+plt.title('Matriz de Correlação')
+plt.savefig('./docs/classes/arvore-de-decisao/img/matriz_correlacao.png')
 plt.show()

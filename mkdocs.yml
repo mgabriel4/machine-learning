@@ -7,22 +7,18 @@ repo_name: github/machine-learning
 theme:
   name: material
   palette:
-    # primary: grey
-    # Light mode
     - scheme: default
       primary: deep_purple
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
 
-    # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
       primary: deep_purple
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
 
-    # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
       primary: deep_purple
@@ -30,13 +26,13 @@ theme:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
 
-    # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       primary: deep_purple
       scheme: slate
       toggle:
         icon: material/toggle-switch
         name: Switch to system preference
+
   features:
     - content.code.copy
     - content.code.select
@@ -48,8 +44,8 @@ theme:
     - navigation.path
     - navigation.tracking
     - navigation.expand
+
   icon:
-    # logo: assets/images/devops
     admonition:
       note: fontawesome/solid/note-sticky
       abstract: fontawesome/solid/book
@@ -68,46 +64,39 @@ markdown_extensions:
   - admonition
   - attr_list
   - md_in_html
-  - markdown_grid_tables
-  - pymdownx.snippets
-  - pymdownx.superfences
-  - pymdownx.highlight
-  - pymdownx.arithmatex:
-      generic: true
-  - pymdownx.details
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-  - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji 
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
-  - pymdownx.inlinehilite
+  - tables
+  - footnotes
   - pymdownx.snippets:
       url_download: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
+          format:
         - name: python
           class: python
-          validator: !!python/name:markdown_exec.validator
-          format: !!python/name:markdown_exec.formatter
+          # validator: !!python/name:markdown_exec.validator
+          # format: !!python/name:markdown_exec.formatter
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.details
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
-      custom_checkbox: true  
-  - footnotes
+      custom_checkbox: true
   - pymdownx.critic
   - pymdownx.caret
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.tilde
-  - pymdownx.blocks.caption
-  - tables
-      
+
 plugins:
+  - search
   - glightbox
   - git-revision-date-localized:
       enable_creation_date: true
@@ -115,13 +104,12 @@ plugins:
   - git-committers:
       repository: hsandmann/hsandmann.github.com
       branch: main
-  - search
   - badges
   - minify:
       minify_html: true
   - markdown-exec
   - render_swagger:
-      allow_arbitrary_locations : true
+      allow_arbitrary_locations: true
   - termynal:
       prompt_literal_start:
         - "$"
@@ -140,6 +128,8 @@ nav:
   - Árvore de decisão: 
     - Projeto 1: ./classes/arvore-de-decisao/projeto1/main.md
     - Projeto 2: ./classes/arvore-de-decisao/projeto2/main.md
+  - KNN:
+    - Projeto: ./classes/knn/main.md
   - Roteiros:
     - Roteiro 1: ./classes/roteiro1/main.md
     - Roteiro 2: ./classes/roteiro2/main.md
