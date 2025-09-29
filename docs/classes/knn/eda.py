@@ -58,10 +58,3 @@ plt.tight_layout()
 plt.savefig('./docs/classes/knn/img/distribuicao_numerica.png')
 plt.show()
 
-# Matriz de correlação
-plt.figure(figsize=(10, 8))
-correlation_matrix = dados.corr()
-sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap='coolwarm')
-plt.title('Matriz de Correlação')
-plt.savefig('./docs/classes/knn/img/matriz_correlacao.png')
-plt.show()

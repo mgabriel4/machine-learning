@@ -52,10 +52,39 @@ As árvores de decisão são uma técnica popular de aprendizado de máquina sup
 
 ### Etapas da árvore
 
-```mermaid
-flowchart TD
-    A[Exploração dos Dados] --> B[Pré-processamento]
-    B --> C[Modelagem]
-    C --> D[Resultados]
-    D --> E[Conclusão]
+``` mermaid
+
+    flowchart TD
+        A[Exploração dos Dados] --> B[Pré-processamento]
+        B --> C[Modelagem]
+        C --> D[Resultados]
+        D --> E[Conclusão]
+
 ```
+## KNN (K-Nearest Neighbors)
+
+O KNN é um algoritmo de aprendizado supervisionado usado para problemas de classificação e regressão. Ele é baseado na ideia de que objetos semelhantes estão próximos uns dos outros no espaço de características. É válido ressaltar que o KNN é bom para conjuntos de dados pequenos e médios, e é simples de entender e implementar.
+
+### Funcionamento
+
+1. **Escolha do K**: O primeiro passo é escolher o número de vizinhos (K) que serão considerados para a classificação ou regressão.
+
+2. **Cálculo da Distância**: Para classificar um novo ponto, o algoritmo calcula a distância entre esse ponto e todos os pontos do conjunto de treinamento. As métricas de distâncias mais comuns são a Euclidiana, Manhattan e Minkowski.
+
+3. **Identificação dos Vizinhos**: O algoritmo seleciona os K pontos mais próximos do conjunto de treinamento.
+
+4. **Classificação ou Regressão**:
+   * **Classificação**: O rótulo do novo ponto é determinado pelos rótulos frequentes dos K vizinhos. (Ou seja, a moda dos rótulos)
+   * **Regressão**: O valor do novo ponto é determinado pela média (ou mediana) dos valores dos K vizinhos.
+
+### Vantagens
+
+* Simplicidade: O KNN é fácil de entender e implementar.
+* Flexibilidade: Pode ser usado para classificação e regressão.
+* Não paramétrico: Não faz suposições sobre a distribuição dos dados.
+
+### Desvantagens
+
+* Custo computacional: O KNN pode ser lento, especialmente com grandes conjuntos de dados, pois precisa calcular a distância de todos os pontos.
+* Sensibilidade a ruídos: O algoritmo pode ser afetado por outliers e ruídos nos dados.
+* Escolha do K: A escolha do valor de K pode impactar significativamente o desempenho do modelo.

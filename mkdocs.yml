@@ -130,6 +130,10 @@ nav:
     - Projeto 2: ./classes/arvore-de-decisao/projeto2/main.md
   - KNN:
     - Projeto: ./classes/knn/main.md
+  - K-Means:
+    - Projeto: ./classes/k-means/main.md
+  - Métricas de Avaliação:
+    - Projeto: ./classes/metricas/main.md
   - Roteiros:
     - Roteiro 1: ./classes/roteiro1/main.md
     - Roteiro 2: ./classes/roteiro2/main.md

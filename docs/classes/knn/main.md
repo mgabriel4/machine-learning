@@ -146,105 +146,15 @@ Nesta etapa, foi realizada a análise exploratória do dataset [heart.csv](https
 === "Gráficos"
     ![Distribuição de variáveis categóricas](../../knn/img/distribuicao.png)
     ![Distribuição de variáveis numéricas](../../knn/img/distribuicao_numerica.png)
-    ![Matriz de correlação](../../knn/img/matriz_correlacao.png)
 
-### Explicação da Matriz de Correlação
-
-A matriz de correlação mostra o grau de relação linear entre as variáveis do dataset. Os valores variam de -1 a 1:
-
-- **Correlação próxima de 1**: relação positiva forte (quando uma variável aumenta, a outra tende a aumentar).
-- **Correlação próxima de -1**: relação negativa forte (quando uma variável aumenta, a outra tende a diminuir).
-- **Correlação próxima de 0**: pouca ou nenhuma relação linear entre as variáveis.
-
-No contexto do dataset de doenças cardíacas, a matriz de correlação permite identificar quais variáveis estão mais associadas ao risco de doença (variável `target`). Por exemplo, se `cp` (tipo de dor no peito) ou `thalach` (frequência cardíaca máxima) apresentarem alta correlação com `target`, podem ser importantes para o modelo preditivo. Relações negativas, como entre `exang` (angina induzida por exercício) e `target`, indicam que a presença de angina pode estar associada à ausência de doença.
-
-Essa análise auxilia na seleção de variáveis relevantes e na compreensão dos fatores que influenciam o risco cardíaco.
+---
 
 ## 2. Pré-processamento
 
-Como visto anteriormente, na etapa de exploração do dataset, não temos variáveis com valores ausentes. Logo, não se torna necessário fazer a substituição destes valores. No entanto, temos algumas variáveis categóricas que precisam ser transformadas em numéricas usando as técnicas do Label Encoding e o One-Hot Encoding.
+Como vimos na exploração da base, não temos valores ausentes. Porém, podemos separar as variáveis categóricas e as variáveis númericas.
 
-**Label Encoding** -> serve para variáveis categóricas que não são binárias.
-
-**One-Hot Encoding** -> serve para variáveis binárias. 0-sim/true e 1-não/false.
-
-* Variáveis categóricas foram transformadas em numéricas para uso no modelo.
-
-* Se tivesse valores nulos, em variáveis numéricas seriam preenchidos com a mediana; em categóricas, com a moda.
-
-* O dataset ficou pronto para o treinamento do modelo.
-
-=== "Output"
-    ```
-          Model  Year         Region   Color Fuel_Type  Engine_Size_L  Mileage_KM  \
-    0  5 Series  2016           Asia     Red    Petrol            3.5      151748
-    1        i8  2013  North America     Red    Hybrid            1.6      121671
-    2  5 Series  2022  North America    Blue    Petrol            4.5       10991
-    3        X3  2024    Middle East    Blue    Petrol            1.7       27255
-    4  7 Series  2020  South America   Black    Diesel            2.1      122131
-    5  5 Series  2017    Middle East  Silver    Diesel            1.9      171362
-    6        i8  2022         Europe   White    Diesel            1.8      196741
-    7        M5  2014           Asia   Black    Diesel            1.6      121156
-    8        X3  2016  South America   White    Diesel            1.7       48073
-    9        i8  2019         Europe   White  Electric            3.0       35700
-
-    Price_USD  Sales_Volume  Model_Num  Region_Num  Color_Num  Fuel_Num  \
-    0      98740          8300          1           1          3         3   
-    1      79219          3428         10           4          3         2   
-    2     113265          6994          1           4          1         3   
-    3      60971          4047          6           3          1         3   
-    4      49898          3080          2           5          0         0   
-    5      42926          1232          1           3          4         0   
-    6      55064          7949         10           2          5         0   
-    7     102778           632          4           1          0         0   
-    8     116482          8944          6           5          5         0   
-    9      96257          4411         10           2          5         1   
-
-    Transmission_Manual  Sales_Classification_Low  
-    0                 True                     False  
-    1                False                      True  
-    2                False                      True  
-    3                False                      True  
-    4                 True                      True  
-    5                 True                      True  
-    6                 True                     False  
-    7                False                      True  
-    8                False                     False  
-    9                 True                      True 
-    ```
-
-=== "Code"
-
-    ```python
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    from sklearn.metrics import classification_report
-    from sklearn.preprocessing import LabelEncoder
-    from sklearn.model_selection import train_test_split
-    from sklearn.tree import DecisionTreeClassifier, plot_tree
-
-    data = pd.read_csv("data/BMW_Car.csv")
-
-    # Label Encoding
-    data['Model_Num'] = LabelEncoder().fit_transform(data['Model'])
-    data['Region_Num'] = LabelEncoder().fit_transform(data['Region'])
-    data['Color_Num'] = LabelEncoder().fit_transform(data['Color'])
-    data['Fuel_Num'] = LabelEncoder().fit_transform(data['Fuel_Type'])
-
-    # One-Hot Encoding
-    data = pd.get_dummies(data, columns=['Transmission', 'Sales_Classification'], drop_first=True)
-
-    print(data.head(10))
-    ```
-
-=== "Explicação"
-    Nesta parte do código utilizamos a biblioteca sklearn que é famosa pelo seu utilizamento em machine learning, sendo possível
-
-    As técnicas são feitas no código através dos comandos:
-
-    * base['nome_coluna'] = LabelEncoder().fit_transform(base['nome_musica']) -> LabelEnconder é um comando que 
-
-    * 
+* **Variáveis númericas:** age, trestbps, chol, thalach, oldpeak.
+* **Variáveis categóricas:** sex, cp, fbs, restecg, exang, slope, ca, thal.
 
 ---
 

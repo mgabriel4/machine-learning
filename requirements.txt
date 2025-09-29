@@ -18,3 +18,4 @@ pandas
 regex
 yfinance
 scikit-learn
+seaborn
