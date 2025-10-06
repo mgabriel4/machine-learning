@@ -126,8 +126,8 @@ nav:
   - Home: index.md
   - Conceitos: ./classes/conceitos/main.md
   - Árvore de decisão: 
-    - Projeto 1: ./classes/arvore-de-decisao/projeto1/main.md
-    - Projeto 2: ./classes/arvore-de-decisao/projeto2/main.md
+    - Projeto 1: ./classes/arvore-de-decisao/classificacao.md
+    - Projeto 2: ./classes/arvore-de-decisao/regressao.md
   - KNN:
     - Projeto: ./classes/knn/main.md
   - K-Means:

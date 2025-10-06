@@ -133,14 +133,6 @@ Nesta etapa, foi realizada a análise exploratória do dataset [heart.csv](https
     plt.tight_layout()
     plt.savefig('./docs/classes/knn/img/distribuicao_numerica.png')
     plt.show()
-
-    # Matriz de correlação
-    plt.figure(figsize=(10, 8))
-    correlation_matrix = dados.corr()
-    sns.heatmap(correlation_matrix, annot=True, fmt=".2f", cmap='coolwarm')
-    plt.title('Matriz de Correlação')
-    plt.savefig('./docs/classes/knn/img/matriz_correlacao.png')
-    plt.show()
     ```
 
 === "Gráficos"
@@ -151,10 +143,22 @@ Nesta etapa, foi realizada a análise exploratória do dataset [heart.csv](https
 
 ## 2. Pré-processamento
 
-Como vimos na exploração da base, não temos valores ausentes. Porém, podemos separar as variáveis categóricas e as variáveis númericas.
+Feito anteriormente no arquivo [processamento.py](../arvore-de-decisao/processamento.py), o pré-processamento incluiu:
+* Tratamento de valores ausentes (não havia valores ausentes neste dataset).
+* Normalização de variáveis numéricas (não foi necessário, pois o KNN é baseado em distância e as variáveis já estão em escalas comparáveis).
+* Codificação de variáveis categóricas (não há variáveis categóricas neste dataset).
+* Criação de variáveis derivadas (não foi necessário).
+=== "Code"
 
-* **Variáveis númericas:** age, trestbps, chol, thalach, oldpeak.
-* **Variáveis categóricas:** sex, cp, fbs, restecg, exang, slope, ca, thal.
+    ```python
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Carregar dados pré-processados
+    data = pd.read_csv('data/heart_preprocessed.csv')
+    ```
 
 ---
 
