@@ -1,14 +1,10 @@
-# Projeto
+# Projeto: Classificação das casas dos EUA com KNN
 
 ## 1. Exploração dos Dados (EDA)
 
-Nesta etapa, foi realizada a análise exploratória do dataset [heart.csv](https://www.kaggle.com/datasets/ritwikb3/heart-disease-cleveland?resource=download), que contém informações clínicas de pacientes para detecção de doenças cardíacas.
+Nesta etapa, foi realizada a análise exploratória do dataset [AmesHousing.csv](https://www.kaggle.com/datasets/ritwikb3/heart-disease-cleveland?resource=download), que contém informações sobre as casas em Ames, Iowa.
 
-* O dataset possui 303 registros e 14 variáveis, incluindo idade, sexo, tipo de dor no peito, pressão arterial, colesterol, frequência cardíaca máxima, entre outras.
-
-* Foram analisadas as primeiras linhas, estatísticas descritivas e valores ausentes (não há valores ausentes neste conjunto).
-
-* Gráficos de barras foram utilizados para visualizar a distribuição das variáveis categóricas e numéricas, além de uma matriz de correlação para identificar relações entre as variáveis.
+Toda esta parte foi analisada anteriormente no arquivo [processamento.py](/docs/classes/arvore-de-decisao/eda.py).
 
 === "Output"
 
@@ -89,75 +85,45 @@ Nesta etapa, foi realizada a análise exploratória do dataset [heart.csv](https
     print(dados.describe(include='all'))
     print("\nValores ausentes por coluna:")
     print(dados.isnull().sum())
-
-    # Visualização das variáveis categóricas
-    plt.style.use('ggplot')
-    plt.figure(figsize=(15, 10))
-
-    plt.subplot(2, 2, 1)
-    sns.countplot(x='target', data=dados)
-    plt.title('Distribuição da variável alvo')
-    plt.ylabel('Contagem')
-
-    plt.subplot(2, 2, 2)
-    sns.countplot(x='sex', data=dados)
-    plt.title('Distribuição por Sexo')
-    plt.ylabel('Contagem')
-
-    plt.subplot(2, 1, 2)
-    sns.countplot(x='cp', data=dados)
-    plt.title('Distribuição por Tipo de Dor no Peito')
-    plt.ylabel('Contagem')
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.savefig('./docs/classes/knn/img/distribuicao.png')
-    plt.show()
-
-    # Visualização das variáveis numéricas
-    plt.figure(figsize=(15, 10))
-    plt.subplot(2, 2, 1)
-    sns.histplot(dados['age'], bins=20, kde=True)
-    plt.title('Distribuição da Idade')
-    plt.xlabel('Idade')
-    plt.ylabel('Frequência')
-    plt.subplot(2, 2, 2)
-    sns.histplot(dados['trestbps'], bins=20, kde=True)
-    plt.title('Distribuição da Pressão Arterial em Repouso')
-    plt.xlabel('Pressão Arterial (mm Hg)')
-    plt.ylabel('Frequência')
-    plt.subplot(2, 1, 2)
-    sns.histplot(dados['chol'], bins=20, kde=True)
-    plt.title('Distribuição do Colesterol')
-    plt.xlabel('Colesterol (mg/dl)')
-    plt.ylabel('Frequência')
-    plt.tight_layout()
-    plt.savefig('./docs/classes/knn/img/distribuicao_numerica.png')
-    plt.show()
     ```
-
-=== "Gráficos"
-    ![Distribuição de variáveis categóricas](../../knn/img/distribuicao.png)
-    ![Distribuição de variáveis numéricas](../../knn/img/distribuicao_numerica.png)
 
 ---
 
 ## 2. Pré-processamento
 
 Feito anteriormente no arquivo [processamento.py](../arvore-de-decisao/processamento.py), o pré-processamento incluiu:
-* Tratamento de valores ausentes (não havia valores ausentes neste dataset).
-* Normalização de variáveis numéricas (não foi necessário, pois o KNN é baseado em distância e as variáveis já estão em escalas comparáveis).
-* Codificação de variáveis categóricas (não há variáveis categóricas neste dataset).
-* Criação de variáveis derivadas (não foi necessário).
+
+* Tratamento de valores ausentes, como preenchimento por média/mediana/moda e remoção de linhas/colunas.
+* Codificação de variáveis categóricas, utilizando as técnicas de One-Hot Encoding e Label Encoding.
+
+Para o modelo KNN, selecionei as 10 features mais relevantes utilizando o método `SelectKBest` com a função de pontuação `f_classif`. **Mas por quê eu tinha que fazer essa seleção?** Porque o KNN é um algoritmo baseado em distância, e muitas features irrelevantes ou redundantes podem introduzir ruído e prejudicar o desempenho do modelo. Ao selecionar as features mais importantes, podemos melhorar a precisão e a eficiência do KNN.
+
+É importante também normalizar ou padronizar as features numéricas para evitar que variáveis com escalas maiores dominem a distância calculada entre os pontos. E aqui eu utilizei o `StandardScaler` para padronizar as features selecionadas. É aconselhável fazer isso **após** a seleção das features, para garantir que a padronização seja aplicada apenas às variáveis relevantes.
+
+A padronização é aplicada apenas nas features, pois a varíavel preditora (target) é categórica e não deve ser alterada.
+
+=== "Output"
+
+    ```
+    As 10 variáveis mais relevantes para o modelo KNN:
+    ['Overall Qual', 'Gr Liv Area', 'Garage Cars', 'Total Bsmt SF', '1st Flr SF', 'Full Bath', 'Year Built', 'Year Remod/Add', 'TotRms AbvGrd', 'Garage Area']
+    ```
+
 === "Code"
 
     ```python
-    from sklearn.model_selection import train_test_split
+    from sklearn.feature_selection import SelectKBest, f_classif
     from sklearn.preprocessing import StandardScaler
-    from sklearn.neighbors import KNeighborsClassifier
-    from sklearn.metrics import classification_report, confusion_matrix
 
-    # Carregar dados pré-processados
-    data = pd.read_csv('data/heart_preprocessed.csv')
+    selector = SelectKBest(score_func=f_classif, k=10)
+    x_new = selector.fit_transform(x, y)
+    selected_features = df.drop(columns=['SalePrice', 'Target']).columns[selector.get_support()]
+
+    print("\nAs 10 variáveis mais relevantes para o modelo KNN:")
+    print(selected_features.tolist())
+
+    x_scaled = StandardScaler().fit_transform(x_new)
+    
     ```
 
 ---
@@ -170,12 +136,11 @@ Com o intuito de ver se minha hipótese é verdadeira ou não, eu treinei o meu 
 
     ```python
     # Seleção das features e target
-    features = ['Year','Region_Num', 'Fuel_Num', 'Transmission_Manual']
-    x = data[features]
-    y = data['Sales_Classification_Low']
+    x = df[['Overall Qual', 'Year Built', 'Exter Qual', 'Bsmt Qual', 'Gr Liv Area', 'Kitchen Qual', 'Garage Cars', 'Garage Area', 'Overall Qual_scaled', 'Garage Finish_Unf']].values
+    y = df['Target'].values.astype('int')
 
     # Divisão dos dados
-    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(x_scaled, y, test_size=0.3, random_state=42)
     ```
 
 === "Explicação"
@@ -188,74 +153,197 @@ Com o intuito de ver se minha hipótese é verdadeira ou não, eu treinei o meu 
 
 ## 4. Treinamento do Modelo
 
-O modelo de árvore de decisão foi treinado com os dados de treino.
+Antes do treinamento, utilizei a validação cruzada para encontrar o valor ideal de k (número de vizinhos) para o KNN. Após testar valores de k de 1 a 20, o melhor valor encontrado foi k=11, com uma acurácia média de aproximadamente 0.79.
+
+=== "Output"
+
+    ```
+    Melhor k: 11
+    Acurácia média com esse k: 0.791
+    ```
 
 === "Code"
 
     ```python
-    clf = DecisionTreeClassifier(random_state=42, max_depth=3)
-    clf.fit(X_train, y_train)
+    #testar o k ideal com validação cruzada
+    from sklearn.model_selection import GridSearchCV
+    param_grid = {'n_neighbors': range(1, 21)}  # testa k de 1 a 20
+
+    knn = KNeighborsClassifier()
+    grid = GridSearchCV(knn, param_grid, cv=5, scoring='accuracy')
+    grid.fit(x_scaled, y)
+
+    print(f"Melhor k: {grid.best_params_['n_neighbors']}")
+    print(f"Acurácia média com esse k: {grid.best_score_:.3f}")
     ```
 
 === "Explicação"
 
-    * Utilizou-se o `DecisionTreeClassifier` com profundidade máxima de 3 para evitar overfitting.
+        * Utilizou-se o `GridSearchCV` para encontrar o melhor valor de k, testando valores de 1 a 20 com validação cruzada de 5 folds. Para cada valor de k, a acurácia média foi calculada.
 
-    * O modelo foi ajustado aos dados de treino.
+        * O modelo foi ajustado aos dados de treino.
+
+---
+
+Para a confirmação do valor de k, construí um gráfico de acurácia média versus valores de k. O gráfico mostra que a acurácia atinge um pico em k=11, confirmando a escolha do melhor valor de k.
+
+=== "Gráfico"
+    ![Gráfico de Acurácia vs k](../../knn/img/acuracia.png)
+
+=== "Output"
+
+    ```
+    Melhor valor de k: 11 (Acurácia média = 0.722)
+    ```
+
+=== "Code"
+
+    ```python
+    from sklearn.model_selection import cross_val_score
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    k_values = range(1, 21)
+    mean_scores = []
+
+    for k in k_values:
+        knn = KNeighborsClassifier(n_neighbors=k)
+        scores = cross_val_score(knn, x_scaled, y, cv=5, scoring='accuracy')
+        mean_scores.append(scores.mean())
+
+    plt.figure(figsize=(8, 4))
+    plt.plot(k_values, mean_scores, marker='o', linestyle='-')
+    plt.title("Acurácia média (5-fold) vs Número de vizinhos (k)")
+    plt.xlabel("Número de vizinhos (k)")
+    plt.ylabel("Acurácia média")
+    plt.grid(True)
+    plt.savefig('/home/mgabriel4/Documentos/GitHub/machine-learning/docs/classes/knn/img/acuracia.png')
+    plt.show()
+
+    best_k = k_values[np.argmax(mean_scores)]
+    print(f"Melhor valor de k: {best_k} (Acurácia média = {max(mean_scores):.3f})")
+    ```
+
+=== "Explicação"
+
+    * O gráfico ilustra a relação entre o número de vizinhos (k) e a acurácia média obtida por validação cruzada.
+
+    * O pico em k=11 reforça a escolha do melhor valor de k para o modelo.
+
+Agora, após a comparação entre os resultados das duas técnicas para descobrir o valor k mais adequado, com o valor de k definido, treinei o modelo KNN com k=11 usando os dados de treino.
+
+=== "Output"
+
+    ```
+    Accuracy: 0.80
+    ```
+
+=== "Code"
+
+    ```python
+    knn = KNeighborsClassifier(n_neighbors=11)
+    knn.fit(X_train, y_train)
+    predictions = knn.predict(X_test)
+    print(f"Accuracy: {accuracy_score(y_test, predictions):.2f}")
+    ```
 
 ---
 
 ## 5. Avaliação do Modelo
 
-O desempenho do modelo foi avaliado com métricas de classificação e visualização da árvore.
+O desempenho do modelo foi avaliado com métricas de classificação e visualização da matriz de confusão.
 
 === "Output"
 
     ```
+    Acurácia: 0.8043230944254836
+
     Relatório de classificação:
                 precision    recall  f1-score   support
 
-        False       0.00      0.00      0.00      4544
-        True       0.70      1.00      0.82     10456
+            0       0.80      0.81      0.81       286
+            1       0.68      0.70      0.69       274
+            2       0.92      0.88      0.90       319
 
-        accuracy                           0.70     15000
-    macro avg       0.35      0.50      0.41     15000
-    weighted avg       0.49      0.70      0.57     15000
+        accuracy                           0.80       879
+    macro avg       0.80      0.80      0.80       879
+    weighted avg       0.81      0.80      0.81       879
     ```
 
 === "Code"
 
     ```python
-    # Previsão e avaliação
-    y_pred = clf.predict(X_test)
-    print("Relatório de classificação:\n", classification_report(y_test, y_pred))
+    print("Acurácia:", accuracy_score(y_test, predictions))
+    print("\nRelatório de classificação:\n", classification_report(y_test, predictions))
 
-    # Visualização da árvore
-    plt.figure(figsize=(10,5))
-    tree = plot_tree(clf, feature_names=features, class_names=['Not Low','Low'], filled=True, rounded=True)
-    plt.savefig('./docs/arvore-de-decisao/arvore.png')
+    cm = confusion_matrix(y_test, predictions)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+    disp.plot(cmap='Blues')
+    plt.title('Matriz de Confusão')
     plt.show()
     ```
 
 === "Gráfico"
-    ![Árvore de Decisão](../../arvore-de-decisao/img/arvorecars.png)
+    ![Matriz de Confusão](../../knn/img/matriz_confusao.png)
 
 === "Explicação"
 
     * O modelo foi avaliado por métricas como precisão, recall e F1-score.
 
-    * A árvore de decisão foi visualizada para interpretação dos resultados.
+    * A matriz de confusão foi visualizada para interpretação dos resultados.
 
 ---
 
-Ao avaliar o desempenho do meu modelo de árvore de decisão, vemos que a acurácia ficou em torno de 70%. Isso significa que, de todos os exemplos do conjunto de teste, o modelo acertou 70% das classificações entre “baixa venda” e “não baixa venda”.
+A matriz de confusão indica que o modelo KNN apresentou boa capacidade de discriminar as classes de preço. As casas de categoria “Baixa” e “Alta” foram corretamente classificadas na maior parte dos casos (acima de 80% de acerto), enquanto a classe intermediária (“Média”) apresentou maior número de erros, sendo frequentemente confundida com as categorias vizinhas. Esse comportamento é esperado, pois os imóveis de preço médio compartilham características tanto de casas baratas quanto de casas de alto padrão. No geral, a acurácia global do modelo foi de aproximadamente 79%, indicando um desempenho satisfatório na classificação do preço dos imóveis.
 
-No entanto, ao analisar o relatório de classificação, percebemos que o modelo tem um recall de 1.00 para a classe “baixa venda”, ou seja, ele identifica todos os casos de baixa venda corretamente. Por outro lado, para a classe “não baixa venda”, o modelo praticamente não acerta (precision, recall e f1-score são 0). Isso indica que o modelo está priorizando a classe majoritária, provavelmente porque *o dataset está desbalanceado, com muito mais exemplos de baixa venda do que de não baixa venda*.
+### 5.1 Gráfico do Limite de Decisão
+
+O gráfico abaixo representa o limite de decisão do modelo KNN treinado com k=11. As regiões coloridas indicam a classificação prevista pelo modelo para diferentes combinações das duas features selecionadas: 'Overall Qual' (qualidade geral) e 'Gr Liv Area' (área de estar acima do solo). Os pontos pretos representam os dados de teste, onde cada ponto é uma casa com sua respectiva classificação real.
+
+![Gráfico do Limite de Decisão](../../knn/img/fronteira_decisao.png)
+
+=== "Code"
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Seleciona duas features para visualização
+    feature1 = 0  # Índice da primeira feature (Overall Qual)
+    feature2 = 1  # Índice da segunda feature (Gr Liv Area)
+
+    x_min, x_max = x_scaled[:, feature1].min() - 1, x_scaled[:, feature1].max() + 1
+    y_min, y_max = x_scaled[:, feature2].min() - 1, x_scaled[:, feature2].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
+                         np.arange(y_min, y_max, 0.01))
+
+    Z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+
+    plt.figure(figsize=(10, 6))
+    plt.contourf(xx, yy, Z, alpha=0.3, cmap=plt.cm.RdYlBu)
+    plt.scatter(X_test[:, feature1], X_test[:, feature2], c=y_test, edgecolor='k', marker='o', s=100, cmap=plt.cm.RdYlBu)
+    plt.xlabel('Overall Qual (padronizado)')
+    plt.ylabel('Gr Liv Area (padronizado)')
+    plt.title('Limite de Decisão do KNN (k=11)')
+    plt.show()
+    ```
+
+=== "Explicação"
+
+    * O gráfico ilustra como o modelo KNN classifica diferentes regiões do espaço de features.
+
+    * As áreas coloridas representam as previsões do modelo, enquanto os pontos pretos indicam os dados de teste reais.
+
+    * Podemos utilizar apenas duas features para visualizar o limite de decisão, mas o modelo KNN foi treinado com todas as 10 features selecionadas.
+---
 
 ## 6. Relatório Final
 
-Concluo que, a análise realizada por meio da árvore de decisão mostrou que fatores técnicos, como o ano de fabricação e o tipo de combustível, além de fatores regionais, influenciam diretamente na classificação de vendas dos veículos, confirmando em grande parte a hipótese inicial. O modelo evidenciou que carros mais antigos apresentam maior propensão a serem classificados como de baixa venda, enquanto em veículos mais recentes o tipo de combustível e a região se tornam mais determinantes.
+O modelo KNN se mostrou eficiente para a tarefa de classificação das casas do dataset Ames Housing, obtendo uma acurácia global de aproximadamente 80%. Após a etapa de pré-processamento — que incluiu o tratamento de valores ausentes, codificação adequada das variáveis categóricas e padronização das features —, foi realizada a seleção das 10 variáveis mais relevantes utilizando o método SelectKBest, o que contribuiu para reduzir ruído e melhorar o desempenho do modelo.
 
-Apesar disso, o relatório de classificação revelou que o modelo possui limitações, uma vez que ele prioriza prever corretamente os casos de baixa venda (Recall = 1,00), mas não consegue identificar com precisão os casos de não baixa venda, refletindo o desbalanceamento presente no conjunto de dados.
+Por meio da validação cruzada com GridSearchCV, identificou-se que o melhor número de vizinhos foi k = 11, ponto em que a acurácia média atingiu o seu valor máximo. A matriz de confusão indicou que o modelo apresentou excelente desempenho nas classes “Baixa” e “Alta”, com taxas de acerto acima de 80%, e um desempenho moderado na classe “Média”, que tende naturalmente a se confundir com as faixas adjacentes de preço.
 
-Dessa forma, conclui-se que a árvore de decisão se mostrou útil para confirmar as hipóteses propostas e identificar padrões relevantes, mas ainda há espaço para aprimoramentos, como o balanceamento das classes ou ajustes nos parâmetros do modelo, para garantir previsões mais equilibradas e robustas.
+A análise gráfica do limite de decisão demonstrou que o KNN foi capaz de delimitar regiões claras de decisão no espaço de atributos, especialmente entre as classes extremas, refletindo a coerência dos padrões de qualidade e metragem presentes no conjunto de dados.
+
+Em suma, o modelo apresentou bom equilíbrio entre simplicidade e desempenho, sendo capaz de generalizar adequadamente os padrões do conjunto de dados. Entretanto, possíveis melhorias poderiam envolver o uso de ponderação de distância (weights='distance'), métodos de redução de dimensionalidade (PCA) ou até mesmo o ajuste de parâmetros adicionais para explorar ainda mais o potencial do KNN no contexto do mercado imobiliário.

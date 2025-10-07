@@ -64,7 +64,7 @@ variaveis_nominais = [
     'Paved Drive', 'Sale Type', 'Sale Condition'
 ]
 
-df = pd.get_dummies(df, columns=variaveis_nominais, drop_first=False)
+df = pd.get_dummies(df, columns=variaveis_nominais)
 
 print(df.head(10))
 
