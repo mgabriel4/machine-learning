@@ -50,7 +50,7 @@ As técnicas para aprendizado da máquina resolve uma variedade de problemas, e 
 
 As árvores de decisão são uma técnica popular de aprendizado de máquina supervisionado usada para classificação e regressão. Elas representam decisões e suas possíveis consequências em uma estrutura hierárquica, facilitando a interpretação dos resultados.
 
-![Comparativo Técnico: Label Encoding vs One Hot Encoding](https://blog.dsacademy.com.br/comparativo-tecnico-label-encoding-vs-one-hot-encoding-em-machine-learning/#:~:text=Cada%20t%C3%A9cnica%20possui%20seu%20prop%C3%B3sito,que%20n%C3%A3o%20induz%20rela%C3%A7%C3%B5es%20inexistentes.)
+[Comparativo Técnico: Label Encoding vs One Hot Encoding](https://blog.dsacademy.com.br/comparativo-tecnico-label-encoding-vs-one-hot-encoding-em-machine-learning/#:~:text=Cada%20t%C3%A9cnica%20possui%20seu%20prop%C3%B3sito,que%20n%C3%A3o%20induz%20rela%C3%A7%C3%B5es%20inexistentes.)
 
 ### Etapas da árvore
 
@@ -78,22 +78,26 @@ flowchart TD
 
 2. **Nós e Folhas**: Cada nó interno representa uma decisão baseada em uma feature, enquanto as folhas representam as previsões finais (rótulos de classe ou valores contínuos).
 
-### Vantagens
+### Vantagens da Árvore de Decisão ✅
 
 * Fácil de interpretar e visualizar.
 * Pode lidar com dados categóricos e numéricos.
 * Requer pouca preparação de dados.
 * Pode capturar relações não lineares.
 
-### Desvantagens
+### Desvantagens da Árvore de Decisão ❌
 
 * Propenso ao overfitting, especialmente com árvores profundas.
 * Sensível a pequenas variações nos dados.
 * Pode ser instável, pois pequenas mudanças nos dados podem levar a árvores muito diferentes.
 
-### Entropia e Ganho de Informação
+### Métricas de Avaliação da Árvore de Decisão
 
-A entropia é uma medida da incerteza ou impureza em um conjunto de dados. Em termos simples, ela quantifica o grau de desordem ou aleatoriedade em um sistema. Em aprendizado de máquina, a entropia é usada para avaliar a qualidade das divisões em uma árvore de decisão.
+**Entropia**: A entropia é uma medida da incerteza ou impureza em um conjunto de dados. Em termos simples, ela quantifica o grau de desordem ou aleatoriedade em um sistema. Em aprendizado de máquina, a entropia é usada para avaliar a qualidade das divisões em uma árvore de decisão.
+
+**Ganho de Informação**: O ganho de informação é uma métrica que quantifica a redução da entropia após uma divisão dos dados com base em uma feature específica. Em outras palavras, ele mede o quanto a incerteza sobre a variável alvo diminui quando os dados são divididos com base em uma determinada feature. O ganho de informação é calculado como a diferença entre a entropia do conjunto de dados original e a entropia ponderada dos subconjuntos resultantes da divisão.
+
+**Índice Gini**: O índice Gini é uma medida de impureza ou pureza usada em árvores de decisão para avaliar a qualidade das divisões dos dados. Ele quantifica a probabilidade de um elemento ser classificado incorretamente se fosse rotulado aleatoriamente de acordo com a distribuição das classes no conjunto de dados. O índice Gini varia entre 0 (pureza máxima, onde todos os elementos pertencem à mesma classe) e 0,5 (impureza máxima, onde as classes estão igualmente distribuídas).
 
 ## KNN (K-Nearest Neighbors)
 
@@ -111,13 +115,13 @@ O KNN é um algoritmo de aprendizado supervisionado usado para problemas de clas
    * **Classificação**: O rótulo do novo ponto é determinado pelos rótulos frequentes dos K vizinhos. (Ou seja, a moda dos rótulos)
    * **Regressão**: O valor do novo ponto é determinado pela média (ou mediana) dos valores dos K vizinhos.
 
-### Vantagens - KNN
+### Vantagens do KNN ✅
 
 * Simplicidade: O KNN é fácil de entender e implementar.
 * Flexibilidade: Pode ser usado para classificação e regressão.
 * Não paramétrico: Não faz suposições sobre a distribuição dos dados.
 
-### Desvantagens - KNN
+### Desvantagens do KNN ❌
 
 * Custo computacional: O KNN pode ser lento, especialmente com grandes conjuntos de dados, pois precisa calcular a distância de todos os pontos.
 * Sensibilidade a ruídos: O algoritmo pode ser afetado por outliers e ruídos nos dados.
@@ -130,7 +134,7 @@ As métricas de avaliação para KNN incluem:
 * **Acurácia**: Proporção de previsões corretas em relação ao total de previsões.
 * **Precisão**: Proporção de verdadeiros positivos em relação ao total de positivos previstos.
 * **Revocação**: Proporção de verdadeiros positivos em relação ao total de positivos reais.
-* **F1-Score**: Média harmônica entre precisão e revocação.
+* **F1-Score**: Média harmônica entre precisão e revocação. Util quando há um desequilíbrio entre classes.
 * **Matriz de Confusão**: Tabela que mostra o desempenho do modelo, detalhando verdadeiros positivos, falsos positivos, verdadeiros negativos e falsos negativos.
 
 ## K-Means
@@ -147,13 +151,13 @@ O K-Means é um algoritmo de aprendizado não supervisionado usado para tarefas 
 
 4. **Convergência**: Os passos 2 e 3 são repetidos até que os centróides não mudem significativamente ou até que um número máximo de iterações seja alcançado.
 
-### Vantagens - K-Means
+### Vantagens do K-Means ✅
 
 * Simplicidade: O K-Means é fácil de entender e implementar.
 * Escalabilidade: Funciona bem em grandes conjuntos de dados.
 * Eficiência: O algoritmo é relativamente rápido, especialmente com implementações otimizadas.
 
-### Desvantagens - K-Means
+### Desvantagens do K-Means ❌
 
 * Escolha do K: A determinação do número ideal de clusters (K) pode ser desafiadora.
 * Sensibilidade a outliers: O K-Means pode ser influenciado por valores extremos.
@@ -200,35 +204,43 @@ O K-Means é amplamente utilizado em diversas áreas, incluindo:
 * **Finanças**: Agrupar ativos financeiros com comportamentos semelhantes para otimizar portfólios de investimento.
 * **Logística**: Otimizar rotas de entrega agrupando destinos próximos.
 * **Educação**: Agrupar estudantes com base em desempenho ou estilos de aprendizagem para personalizar o ensino.
-* **Recursos Humanos**: Agrupar funcionários com base em habilidades ou desempenho para melhorar a gestão de talentos.
-* **Análise de Sentimentos**: Agrupar opiniões ou feedbacks semelhantes para entender melhor as percepções dos clientes.
-* **Ciência Ambiental**: Agrupar áreas geográficas com características ambientais semelhantes para estudos ecológicos.
-* **Jogos**: Agrupar jogadores com habilidades ou estilos de jogo semelhantes para melhorar a experiência do usuário.
-* **Pesquisa de Mercado**: Agrupar respostas de pesquisas para identificar tendências e preferências dos consumidores.
-* **Agricultura**: Agrupar áreas agrícolas com características semelhantes para otimizar o uso de recursos e melhorar a produtividade.
-* **Indústria**: Agrupar máquinas ou processos com desempenho semelhante para otimizar a produção e a manutenção.
-* **Turismo**: Agrupar destinos turísticos com características semelhantes para personalizar ofertas e pacotes de viagem.
-* **Mídia e Entretenimento**: Agrupar conteúdos (filmes, músicas, livros) com base em preferências dos usuários para melhorar recomendações.
-* **Transporte**: Agrupar padrões de tráfego ou rotas de transporte para otimizar a mobilidade urbana.
-* **Segurança**: Agrupar padrões de comportamento para detectar atividades suspeitas ou anômalas.
-* **Desenvolvimento Urbano**: Agrupar áreas urbanas com características semelhantes para planejar o desenvolvimento e a infraestrutura.
-* **Pesquisa Científica**: Agrupar dados experimentais para identificar padrões e relações em estudos científicos.
-* **Análise de Redes**: Agrupar nós ou entidades em redes sociais ou de comunicação para entender melhor as conexões e influências.
-* **Moda e Varejo**: Agrupar produtos ou estilos de moda com base em preferências dos consumidores para melhorar a oferta de produtos.
-* **Telecomunicações**: Agrupar usuários com base em padrões de uso para personalizar planos e serviços.
-* **Energia**: Agrupar padrões de consumo de energia para otimizar a distribuição e o uso de recursos energéticos.
-* **Imobiliário**: Agrupar propriedades com características semelhantes para facilitar a busca e a análise de mercado.
-* **Esportes**: Agrupar atletas com base em desempenho ou características físicas para melhorar o treinamento e a seleção de equipes.
-* **Cibersegurança**: Agrupar padrões de ataques ou vulnerabilidades para melhorar a defesa contra ameaças digitais.
-* **Análise de Dados de Saúde Pública**: Agrupar surtos de doenças ou padrões de saúde para melhorar a resposta e a prevenção.
-* **Análise de Dados de Transporte Público**: Agrupar padrões de uso de transporte público para otimizar rotas e horários.
-* **Análise de Dados de Energia Renovável**: Agrupar padrões de geração e consumo de energia renovável para melhorar a eficiência e a integração com a rede elétrica.
-* **Análise de Dados de Clima**: Agrupar padrões climáticos para entender melhor as mudanças e tendências ambientais.
-* **Análise de Dados de Produção Industrial**: Agrupar padrões de produção para otimizar processos e melhorar a eficiência operacional.
-* **Análise de Dados de Redes Elétricas**: Agrupar padrões de consumo e distribuição de energia para melhorar a gestão e a confiabilidade da rede elétrica.
-* **Análise de Dados de Transporte de Carga**: Agrupar padrões de transporte de carga para otimizar rotas e reduzir custos logísticos.
-* **Análise de Dados de Serviços Financeiros**: Agrupar padrões de comportamento financeiro para personalizar produtos e serviços bancários.
-* **Análise de Dados de Saúde Mental**: Agrupar padrões de saúde mental para melhorar o diagnóstico e o tratamento de transtornos psicológicos.
+
+## Random Forest
+
+O Random Forest é um algoritmo de aprendizado supervisionado que combina múltiplas árvores de decisão para melhorar a precisão e robustez das previsões. Ele é amplamente utilizado para tarefas de classificação e regressão devido à sua capacidade de lidar com grandes conjuntos de dados e alta dimensionalidade.
+
+### Funcionamento - Random Forest
+
+1. **Construção das Árvores**: O Random Forest constrói várias árvores de decisão a partir de diferentes subconjuntos aleatórios dos dados de treinamento. Cada árvore é treinada em uma amostra bootstrap (amostragem com reposição) dos dados.
+
+2. **Seleção de Recursos**: Durante a construção de cada árvore, um subconjunto aleatório de recursos (features) é selecionado para determinar a melhor divisão em cada nó. Isso ajuda a reduzir a correlação entre as árvores e melhora a generalização do modelo.
+
+3. **Agregação de Resultados**: Para fazer previsões, o Random Forest agrega as previsões de todas as árvores individuais. Para tarefas de classificação, a classe mais frequente entre as árvores é escolhida. Para tarefas de regressão, a média das previsões é calculada.
+
+### Vantagens do Random Forest ✅
+
+* Alta Precisão: Geralmente oferece melhor desempenho do que uma única árvore de decisão.
+* Robustez: Menos propenso ao overfitting devido à agregação de múltiplas árvores.
+* Capacidade de lidar com dados faltantes e variáveis categóricas.
+* Importância das Features: Fornece medidas de importância das features, ajudando na interpretação do modelo.
+
+### Desvantagens do Random Forest ❌
+
+* Complexidade: Mais difícil de interpretar do que uma única árvore de decisão.
+* Custo Computacional: Requer mais recursos computacionais para treinamento e previsão.
+* Pode ser menos eficaz em conjuntos de dados muito pequenos.
+
+### Métricas de Avaliação do Random Forest
+
+As métricas de avaliação para o Random Forest incluem:
+
+* Acurácia: Proporção de previsões corretas em relação ao total de previsões.
+* Precisão: Proporção de verdadeiros positivos em relação ao total de positivos previstos.
+* Revocação (Sensibilidade): Proporção de verdadeiros positivos em relação ao total de positivos reais.
+* F1-Score: Média harmônica entre precisão e revocação.
+* AUC-ROC: Área sob a curva ROC, que mede a capacidade de discriminação do modelo.
+
+---
 
 ## Referências
 

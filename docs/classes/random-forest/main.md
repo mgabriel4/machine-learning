@@ -1,10 +1,6 @@
-# Projeto: Baixa, média e alta renda, qual casa você pode comprar nos EUA?
+# Projeto Random Forest
 
-## Objetivo
-
-O objetivo deste projeto é utilizar um modelo de árvore de decisão para classificar imóveis em diferentes faixas de preço (baixa, média e alta renda) com base em suas características.
-
-## 1. Exploração dos Dados (EDA)
+Neste projeto, vamos construir um modelo de Random Forest para classificar as casas da base Ames Housing em diferentes categorias de preço.
 
 Nesta etapa, foi realizada a análise exploratória do dataset [AmesHousing.csv](https://www.kaggle.com/datasets/hsumedh1507/ames-housing-dataset), verificando as primeiras linhas, informações gerais, estatísticas descritivas, valores ausentes e visualização de algumas variáveis categóricas.
 
@@ -498,213 +494,54 @@ Na tabela abaixo estão listadas as variáveis que foram transformadas utilizand
 
 * Variáveis categóricas foram transformadas em numéricas para uso no modelo.
 
-=== "Output"
-    ```
-        MS SubClass  Lot Frontage  ...  Sale Condition_Normal  Sale Condition_Partial
-    0           20         141.0  ...                   True                   False
-    1           20          80.0  ...                   True                   False
-    2           20          81.0  ...                   True                   False
-    3           20          93.0  ...                   True                   False
-    4           60          74.0  ...                   True                   False
-    5           60          78.0  ...                   True                   False
-    6          120          41.0  ...                   True                   False
-    7          120          43.0  ...                   True                   False
-    8          120          39.0  ...                   True                   False
-    9           60          60.0  ...                   True                   False
+## Passo 2: Carregar o Conjunto de Dados
 
-    [10 rows x 233 columns]
-    ```
-
-=== "Code"
+Carregamos o conjunto de dados Iris diretamente do repositório do UCI Machine Learning Repository.
 
     ```python
-    variaveis_ordinal = {
-        'Exter Qual': {'Po':1, 'Fa':2, 'TA':3, 'Gd':4, 'Ex':5},
-        'Exter Cond': {'Po':1, 'Fa':2, 'TA':3, 'Gd':4, 'Ex':5},
-        'Bsmt Qual': {'Po':1, 'Fa':2, 'TA':3, 'Gd':4, 'Ex':5},
-        'Bsmt Cond': {'Po':1, 'Fa':2, 'TA':3, 'Gd':4, 'Ex':5},
-        'Heating QC': {'Po':1, 'Fa':2, 'TA':3, 'Gd':4, 'Ex':5},
-        'Kitchen Qual': {'Po':1, 'Fa':2, 'TA':3, 'Gd':4, 'Ex':5},
-        'Garage Qual': {'Po':1, 'Fa':2, 'TA':3, 'Gd':4, 'Ex':5},
-        'Garage Cond': {'Po':1, 'Fa':2, 'TA':3, 'Gd':4, 'Ex':5},
-        'Bsmt Exposure': {'No':1, 'Mn':2, 'Av':3, 'Gd':4},
-        'BsmtFin Type 1': {'Unf':1, 'LwQ':2, 'Rec':3, 'BLQ':4, 'ALQ':5, 'GLQ':6},
-        'BsmtFin Type 2': {'Unf':1, 'LwQ':2, 'Rec':3, 'BLQ':4, 'ALQ':5, 'GLQ':6},
-        'Functional': {'Sal':1, 'Sev':2, 'Maj2':3, 'Maj1':4, 'Mod':5, 'Min2':6, 'Min1':7, 'Typ':8},
-    }
-
-    for col, mapping in variaveis_ordinal.items():
-        if col in df.columns:
-            df[col] = df[col].map(mapping).fillna(0).astype(int)
-
-    variaveis_nominais = [
-        'MS Zoning', 'Street', 'Lot Shape', 'Land Contour',
-        'Utilities', 'Lot Config', 'Land Slope', 'Neighborhood', 'Condition 1',
-        'Condition 2', 'Bldg Type', 'House Style', 'Roof Style', 'Roof Matl',
-        'Exterior 1st', 'Exterior 2nd', 'Mas Vnr Type', 'Foundation',
-        'Heating', 'Central Air', 'Electrical', 'Garage Type', 'Garage Finish',
-        'Paved Drive', 'Sale Type', 'Sale Condition'
-    ]
-
-    df = pd.get_dummies(df, columns=variaveis_nominais, drop_first=False)
-    print(df.head(10))
-
+        url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+        columns = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
+        data = pd.read_csv(url, names=columns)
     ```
 
----
+## Passo 3: Pré-processamento dos Dados
 
-## 3. Divisão dos Dados
-
-Nessa etapa, eu criei a variável target e escolhi como features todas as outras variáveis para a construção do meu modelo. Os dados foram divididos em conjuntos de treino e teste, utilizando 70% dos dados para treino e 30% para teste. É importante garantir que a divisão seja feita de forma aleatória para evitar viés.
-
-=== "Output"
-    ```
-        Target
-    0    981
-    1    980
-    2    969
-    Name: count, dtype: int64
-    Features usadas no modelo:
-    ['MS SubClass', 'Lot Frontage', 'Lot Area', 'Overall Qual', 'Overall Cond', 'Year Built', 'Year Remod/Add', 'Mas Vnr Area', 'Exter Qual', 'Exter Cond', 'Bsmt Qual', 'Bsmt Cond', 'Bsmt Exposure', 'BsmtFin Type 1', 'BsmtFin SF 1', 'BsmtFin Type 2', 'BsmtFin SF 2', 'Bsmt Unf SF', 'Total Bsmt SF', 'Heating QC', '1st Flr SF', '2nd Flr SF', 'Low Qual Fin SF', 'Gr Liv Area', 'Bsmt Full Bath', 'Bsmt Half Bath', 'Full Bath', 'Half Bath', 'Bedroom AbvGr', 'Kitchen AbvGr', 'Kitchen Qual', 'TotRms AbvGrd', 'Functional', 'Fireplaces', 'Garage Yr Blt', 'Garage Cars', 'Garage Area', 'Garage Qual', 'Garage Cond', 'Wood Deck SF', 'Open Porch SF', 'Enclosed Porch', '3Ssn Porch', 'Screen Porch', 'Pool Area', 'Misc Val', 'Mo Sold', 'Yr Sold', 'MS Zoning_A (agr)', 'MS Zoning_C (all)', 'MS Zoning_FV', 'MS Zoning_I (all)', 'MS Zoning_RH', 'MS Zoning_RL', 'MS Zoning_RM', 'Street_Grvl', 'Street_Pave', 'Lot Shape_IR1', 'Lot Shape_IR2', 'Lot Shape_IR3', 'Lot Shape_Reg', 'Land Contour_Bnk', 'Land Contour_HLS', 'Land Contour_Low', 'Land Contour_Lvl', 'Utilities_AllPub', 'Utilities_NoSeWa', 'Utilities_NoSewr', 'Lot Config_Corner', 'Lot Config_CulDSac', 'Lot Config_FR2', 'Lot Config_FR3', 'Lot Config_Inside', 'Land Slope_Gtl', 'Land Slope_Mod', 'Land Slope_Sev', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_CollgCr', 'Neighborhood_Crawfor', 'Neighborhood_Edwards', 'Neighborhood_Gilbert', 'Neighborhood_Greens', 'Neighborhood_GrnHill', 'Neighborhood_IDOTRR', 'Neighborhood_Landmrk', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NAmes', 'Neighborhood_NPkVill', 'Neighborhood_NWAmes', 'Neighborhood_NoRidge', 'Neighborhood_NridgHt', 'Neighborhood_OldTown', 'Neighborhood_SWISU', 'Neighborhood_Sawyer', 'Neighborhood_SawyerW', 'Neighborhood_Somerst', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'Condition 1_Artery', 'Condition 1_Feedr', 'Condition 1_Norm', 'Condition 1_PosA', 'Condition 1_PosN', 'Condition 1_RRAe', 'Condition 1_RRAn', 'Condition 1_RRNe', 'Condition 1_RRNn', 'Condition 2_Artery', 'Condition 2_Feedr', 'Condition 2_Norm', 'Condition 2_PosA', 'Condition 2_PosN', 'Condition 2_RRAe', 'Condition 2_RRAn', 'Condition 2_RRNn', 'Bldg Type_1Fam', 'Bldg Type_2fmCon', 'Bldg Type_Duplex', 'Bldg Type_Twnhs', 'Bldg Type_TwnhsE', 'House Style_1.5Fin', 'House Style_1.5Unf', 'House Style_1Story', 'House Style_2.5Fin', 'House Style_2.5Unf', 'House Style_2Story', 'House Style_SFoyer', 'House Style_SLvl', 'Roof Style_Flat', 'Roof Style_Gable', 'Roof Style_Gambrel', 'Roof Style_Hip', 'Roof Style_Mansard', 'Roof Style_Shed', 'Roof Matl_ClyTile', 'Roof Matl_CompShg', 'Roof Matl_Membran', 'Roof Matl_Metal', 'Roof Matl_Roll', 'Roof Matl_Tar&Grv', 'Roof Matl_WdShake', 'Roof Matl_WdShngl', 'Exterior 1st_AsbShng', 'Exterior 1st_AsphShn', 'Exterior 1st_BrkComm', 'Exterior 1st_BrkFace', 'Exterior 1st_CBlock', 'Exterior 1st_CemntBd', 'Exterior 1st_HdBoard', 'Exterior 1st_ImStucc', 'Exterior 1st_MetalSd', 'Exterior 1st_Plywood', 'Exterior 1st_PreCast', 'Exterior 1st_Stone', 'Exterior 1st_Stucco', 'Exterior 1st_VinylSd', 'Exterior 1st_Wd Sdng', 'Exterior 1st_WdShing', 'Exterior 2nd_AsbShng', 'Exterior 2nd_AsphShn', 'Exterior 2nd_Brk Cmn', 'Exterior 2nd_BrkFace', 'Exterior 2nd_CBlock', 'Exterior 2nd_CmentBd', 'Exterior 2nd_HdBoard', 'Exterior 2nd_ImStucc', 'Exterior 2nd_MetalSd', 'Exterior 2nd_Other', 'Exterior 2nd_Plywood', 'Exterior 2nd_PreCast', 'Exterior 2nd_Stone', 'Exterior 2nd_Stucco', 'Exterior 2nd_VinylSd', 'Exterior 2nd_Wd Sdng', 'Exterior 2nd_Wd Shng', 'Mas Vnr Type_BrkCmn', 'Mas Vnr Type_BrkFace', 'Mas Vnr Type_CBlock', 'Mas Vnr Type_Stone', 'Foundation_BrkTil', 'Foundation_CBlock', 'Foundation_PConc', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'Central Air_N', 'Central Air_Y', 'Electrical_FuseA', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'Electrical_SBrkr', 'Garage Type_2Types', 'Garage Type_Attchd', 'Garage Type_Basment', 'Garage Type_BuiltIn', 'Garage Type_CarPort', 'Garage Type_Detchd', 'Garage Finish_Fin', 'Garage Finish_RFn', 'Garage Finish_Unf', 'Paved Drive_N', 'Paved Drive_P', 'Paved Drive_Y', 'Sale Type_COD', 'Sale Type_CWD', 'Sale Type_Con', 'Sale Type_ConLD', 'Sale Type_ConLI', 'Sale Type_ConLw', 'Sale Type_New', 'Sale Type_Oth', 'Sale Type_VWD', 'Sale Type_WD ', 'Sale Condition_Abnorml', 'Sale Condition_AdjLand', 'Sale Condition_Alloca', 'Sale Condition_Family', 'Sale Condition_Normal', 'Sale Condition_Partial']
-    Tamanho do treino: (2051, 232)
-    Tamanho do teste: (879, 232)
-
-    Distribuição das classes no target:
-    Target
-    1    0.344222
-    0    0.338859
-    2    0.316919
-    Name: proportion, dtype: float64
-    ```
-
-=== "Code"
+Verificamos se há valores ausentes e codificamos a variável alvo.
 
     ```python
-    #criando a target para classificar o preço das casas em baixa, média e alta
-    print(df['SalePrice'].describe()) 
-
-    df['Target'] = pd.qcut( 
-        df['SalePrice'], 
-        q=3, 
-        labels=['Baixa', 'Média', 'Alta']
-    )
-
-    df['Target'] = df['Target'].map({'Baixa':0, 'Média':1, 'Alta':2}).astype('int')
-
-    print(df['Target'].value_counts()) 
-
-    x = df.drop(columns=['SalePrice', 'Target'])
-    y = df['Target']
-
-    features = x.columns.tolist()
-    print("Features usadas no modelo:\n", features)
-    
-    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=42)
-
-    print("Tamanho do treino:", X_train.shape)
-    print("Tamanho do teste:", X_test.shape)
-    print("\nDistribuição das classes no target:")
-    print(y_train.value_counts(normalize=True))
+        print(data.isnull().sum())
+        data['species'] = data['species'].astype('category').cat.codes
     ```
 
-=== "Explicação"
+## Passo 4: Dividir os Dados em Conjuntos de Treinamento e Teste
 
-    * As variáveis de entrada (features -> variáveis x) e saída (target -> variável y) foram definidas.
-
-    * Split 70/30 para treino e teste, garantindo avaliação justa do modelo.
-
----
-
-## 4. Treinamento do Modelo
-
-O modelo de árvore de decisão foi treinado com os dados de treino.
-
-=== "Code"
+Dividimos os dados em conjuntos de treinamento e teste para avaliar o desempenho do modelo.
 
     ```python
-    #criação e treino do modelo de árvore de decisão
-    clf = DecisionTreeClassifier(random_state=42, max_depth=3, criterion='entropy')  # você pode ajustar max_depth
-    clf.fit(X_train, y_train)
+    X = data.drop('species', axis=1)
+    y = data['species']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     ```
 
-=== "Explicação"
+## Passo 5: Construir o Modelo Random Forest
 
-    * Como critério de divisão, utilizou-se a entropia para medir a incerteza com base na teoria da informação (usado quando se quer interpretar a árvore em termos de bits de informação).
-
-    * Utilizou-se o `DecisionTreeClassifier` com profundidade máxima de 3 para evitar overfitting.
-
-    * O modelo foi ajustado aos dados de treino.
-
----
-
-## 5. Avaliação do Modelo
-
-O desempenho do modelo foi avaliado com métricas de classificação e visualização da árvore.
-
-=== "Output"
-
-    ```
-    Relatório de classificação:
-                precision    recall  f1-score   support
-
-            0       0.78      0.78      0.78       286
-            1       0.64      0.61      0.62       274
-            2       0.85      0.88      0.86       319
-
-        accuracy                        0.76       879
-    macro avg       0.75      0.76      0.75       879
-    weighted avg    0.76      0.76      0.76       879
-    ```
-
-=== "Code"
+Criamos e treinamos o modelo Random Forest.
 
     ```python
-    #fazer previsões no conjunto de teste
-    y_pred = clf.predict(X_test)
-
-    #avaliação do modelo
-    print("Relatório de classificação:\n", classification_report(y_test, y_pred))
-
-    #visualização da árvore de decisão
-    plt.figure(figsize=(16,8))
-    plot_tree(clf, filled=True, fontsize=8, class_names=['Baixa','Média','Alta'])
-    plt.savefig('./docs/classes/arvore-de-decisao/img/arvore_decisao.png')
+    rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+    rf_model.fit(X_train, y_train)
     ```
 
-=== "Explicação"
+## Passo 6: Avaliar o Modelo
 
-    * O modelo foi avaliado por métricas como precisão, recall e F1-score.
+Avaliamos o desempenho do modelo usando métricas como matriz de confusão e relatório de classificação.
 
-    * A acurácia geral do modelo foi de 76%, indicando um bom desempenho na classificação das casas em baixa, média e alta renda.
+    ```python
+    y_pred = rf_model.predict(X_test)
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    ```
 
-    * A precisão e recall foram particularmente altos para a classe de alta renda, sugerindo que o modelo é eficaz em identificar casas de maior valor.
+## Conclusão
 
-    * O F1-score para a classe de renda média foi o mais baixo, refletindo a dificuldade em distinguir propriedades com características intermediárias.
-
----
-
-![Árvore de Decisão](../../arvore-de-decisao/img/arvore_decisao.png)
-
-O modelo de árvore de decisão desenvolvido para classificar as casas da base AmesHousing em três categorias — baixa, média e alta renda — apresentou resultados bastante satisfatórios e consistentes. A acurácia global obtida foi de 76%, indicando que o modelo conseguiu aprender de forma eficiente os padrões que distinguem as faixas de preço dos imóveis a partir de suas características estruturais, de qualidade e localização.
-
-A análise das métricas por classe mostra um comportamento coerente com a natureza do problema. As casas de alta renda foram as mais bem classificadas, com precision de 0,85 e recall de 0,88, evidenciando que o modelo identifica de forma muito precisa os imóveis de maior valor. As casas de baixa renda também apresentaram um bom desempenho, com métricas equilibradas de precision e recall em torno de 0,78. Já a faixa de renda média foi a mais desafiadora, com F1-score de 0,62, o que é esperado, pois essas propriedades possuem características intermediárias que se sobrepõem às das outras classes — tornando sua separação menos evidente.
-
-A estrutura da árvore de decisão revela divisões bastante intuitivas. Os principais critérios de separação estão relacionados a variáveis como qualidade geral do imóvel (Overall Qual), área habitável (Gr Liv Area) e ano de construção (Year Built), fatores que historicamente são determinantes para o valor de mercado de uma casa. O modelo dividiu os dados de forma lógica: imóveis com menor qualidade e área ficaram concentrados nos nós que levam à classificação de baixa renda, enquanto casas de padrão superior e maior metragem foram alocadas nos ramos associados à alta renda. As subdivisões intermediárias formam os grupos de renda média, onde a entropia é mais alta, refletindo a maior mistura entre categorias.
-
-### 5.1 Importância das Variáveis
-
-![Importância das Variáveis](../../arvore-de-decisao/img/importancia_variaveis.png)
-
-A análise da importância das variáveis reforça a relevância dos atributos selecionados. A qualidade geral do imóvel (Overall Qual) foi a variável mais influente, seguida pela área habitável (Gr Liv Area) e pelo ano de construção (Year Built). Essas três variáveis juntas explicam uma parcela significativa da capacidade preditiva do modelo. Outras características, como o número de banheiros, a presença de garagem e a localização (Neighborhood), também tiveram impacto relevante, embora em menor escala.
-
-### 5.2 Matriz de Confusão
-
-![Matriz de Confusão](../../arvore-de-decisao/img/matriz_confusao.png)
-
-Mais detalhadamente, a matriz de confusão revela que o modelo cometeu alguns erros de classificação, especialmente entre as classes de baixa e média renda. Houve uma quantidade considerável de casas de baixa renda que foram classificadas como média renda, o que pode ser atribuído à sobreposição das características dessas categorias. No entanto, os erros entre baixa e alta renda foram mínimos, indicando que o modelo é eficaz em distinguir extremos.
-
-## 6. Relatório Final
-
-Concluo que, visualmente, observa-se que a árvore possui nós bem definidos e relativamente puros, principalmente nas extremidades — o que reforça a boa capacidade de discriminação do modelo. O uso do critério de entropia permitiu identificar divisões que maximizam o ganho de informação, resultando em agrupamentos coerentes e interpretáveis. A predominância de variáveis de qualidade e tamanho nas decisões internas indica que o modelo está de fato capturando a lógica do mercado imobiliário, em que o preço é fortemente determinado por essas dimensões.
-
-O modelo se mostra robusto, interpretável e eficiente para o objetivo proposto. Apesar de apresentar certa dificuldade na distinção entre as faixas médias de preço — algo comum em problemas desse tipo —, o desempenho global é satisfatório e demonstra que a árvore de decisão conseguiu aprender padrões reais e relevantes presentes nos dados.
+O modelo de Random Forest foi capaz de classificar as espécies de flores com uma boa precisão. A matriz de confusão e o relatório de classificação fornecem insights sobre o desempenho do modelo e suas áreas de melhoria. Com ajustes adicionais e mais dados, o modelo pode ser aprimorado ainda mais.
