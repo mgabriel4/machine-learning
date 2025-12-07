@@ -6,7 +6,7 @@ Este projeto utiliza o algoritmo K-Means para agrupar casas com base em suas car
 
 O dataset Ames Housing contém diversas características das casas, como área, número de quartos, idade, entre outras. A análise exploratória dos dados (EDA) foi realizada para entender a distribuição das características e identificar possíveis correlações com o preço das casas.
 
-Toda esta etapa foi realizada no arquivo [Exploração dos Dados (EDA)](/docs/classes/arvore-de-decisao/eda.py).
+Toda esta etapa foi realizada no arquivo [Exploração dos Dados (EDA)](../../arvore-de-decisao/eda.py).
 
 ## Pré-processamento dos Dados
 
@@ -21,8 +21,8 @@ O dataset foi carregado e pré-processado para remover valores ausentes e normal
 7. Avaliação do modelo com base na distribuição dos clusters em relação às faixas de preço.
 8. Visualização dos resultados.
 
-As etapas 2, 3 e 4 foram realizadas no arquivo [Pré-processamento dos Dados](/docs/classes/k-means/processamento.ipynb).
-Já a etapa de seleção das variáveis foi realizada no arquivo [Seleção de Variáveis](/docs/classes/knn/processamento.ipynb).
+As etapas 2, 3 e 4 foram realizadas no arquivo [Pré-processamento dos Dados](../../k-means/processamento.ipynb).
+Já a etapa de seleção das variáveis foi realizada no arquivo [Seleção de Variáveis](../../knn/processamento.ipynb).
 
 === "Output"
 
@@ -282,7 +282,7 @@ Utilizamos este método para determinar o número ideal de clusters (k) para o K
 
     ```
 
-![Elbow Curve](/docs/classes/k-means/img/elbow_method.png)
+![Elbow Curve](../../k-means/img/elbow_method.png)
 
 A partir do gráfico, escolhemos k=3 para o modelo K-Means.
 
@@ -321,7 +321,7 @@ O modelo K-Means foi treinado com k=3 clusters. Após o treinamento, os clusters
 
     ```
 
-![Clusters KMeans](/docs/classes/k-means/img/kmeans_clusters.png)
+![Clusters KMeans](../../k-means/img/kmeans_clusters.png)
 
 Interpretamos os clusters formados:
 
@@ -370,6 +370,6 @@ A avaliação do modelo foi feita analisando a distribuição dos clusters em re
 
     ```
 
-![Tabela de Clusters vs Valores médios dos features](/docs/classes/k-means/img/tabela_k-means.png)
+![Tabela de Clusters vs Valores médios dos features](../../k-means/img/tabela_k-means.png)
 
 Vemos que o modelo K-Means conseguiu agrupar as casas de forma que os clusters correspondem às faixas de preço, embora haja alguma sobreposição. Isso indica que o K-Means pode ser útil para segmentar o mercado imobiliário com base em características das casas.

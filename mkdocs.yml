@@ -10,27 +10,27 @@ theme:
     - scheme: default
       primary: deep_purple
       toggle:
-        icon: material/toggle-switch-off-outline
+        icon: fontawesome/solid/moon
         name: Switch to dark mode
 
     - media: "(prefers-color-scheme)"
       primary: deep_purple
       toggle:
-        icon: material/toggle-switch
+        icon: fontawesome/solid/sun
         name: Switch to light mode
 
     - media: "(prefers-color-scheme: light)"
       scheme: default
       primary: deep_purple
       toggle:
-        icon: material/toggle-switch-off-outline
+        icon: fontawesome/solid/moon
         name: Switch to dark mode
 
     - media: "(prefers-color-scheme: dark)"
       primary: deep_purple
       scheme: slate
       toggle:
-        icon: material/toggle-switch
+        icon: fontawesome/solid/sun
         name: Switch to system preference
 
   features:
@@ -102,7 +102,7 @@ plugins:
       enable_creation_date: true
   - git-authors
   - git-committers:
-      repository: hsandmann/hsandmann.github.com
+      repository: https://mgabriel4.github.io/machine-learning/
       branch: main
   - badges
   - minify:
@@ -124,21 +124,26 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Conceitos: ./classes/conceitos/main.md
+  - Conceitos Iniciais: ./classes/conceitos/main.md
   - Árvore de decisão: 
+    - Conceito: ./classes/arvore-de-decisao/conceito.md
     - Projeto 1: ./classes/arvore-de-decisao/classificacao.md
     - Projeto 2: ./classes/arvore-de-decisao/regressao.md
   - KNN:
+    - Conceito: ./classes/knn/conceito.md
     - Projeto: ./classes/knn/main.md
   - K-Means:
+    - Conceito: ./classes/k-means/conceito.md
     - Projeto: ./classes/k-means/main.md
+  - Comparação de Modelos:
+    - Métricas de Avaliação: ./classes/metricas/main.md
   - Random Forest:
+    - Conceito: ./classes/random-forest/conceito.md
     - Projeto: ./classes/random-forest/main.md
-  - Roteiros:
-    - Roteiro 1: ./classes/roteiro1/main.md
-    - Roteiro 2: ./classes/roteiro2/main.md
-    - Roteiro 3: ./classes/roteiro3/main.md
-    - Roteiro 4: ./classes/roteiro4/main.md
+  - Gradient Boosting:
+    - Conceito: ./classes/gradient/conceito.md
+    - Projeto: ./classes/gradient/main.md
   - Projeto: ./classes/projeto/main.md
   - Quiz:
-    - Conceitos: ./classes/quiz/conceitos.md
+    - Questões Básicas de Conceitos: ./classes/quiz/conceitos.md
+    - Questões Estudos para a Prova 1: ./classes/quiz/prova1.md
