@@ -137,12 +137,16 @@ nav:
     - Projeto: ./classes/k-means/main.md
   - Comparação de Modelos:
     - Métricas de Avaliação: ./classes/metricas/main.md
+    - Comparação entre KNN e K-Means: ./classes/metricas/comparacao.md
   - Random Forest:
     - Conceito: ./classes/random-forest/conceito.md
     - Projeto: ./classes/random-forest/main.md
   - Gradient Boosting:
     - Conceito: ./classes/gradient/conceito.md
     - Projeto: ./classes/gradient/main.md
+  - Support Vector Machine(SVM):
+    - Conceito: ./classes/svm/conceito.md
+    - Projeto: ./classes/svm/projeto.md
   - Projeto: ./classes/projeto/main.md
   - Quiz:
     - Questões Básicas de Conceitos: ./classes/quiz/conceitos.md
